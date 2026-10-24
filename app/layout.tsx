@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { ServiceWorkerRegister } from "@/components/sw-register";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -48,6 +49,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" forcedTheme="dark" disableTransitionOnChange>
           {children}
           <Toaster />
+          <ServiceWorkerRegister />
         </ThemeProvider>
       </body>
     </html>
