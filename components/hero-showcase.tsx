@@ -367,7 +367,10 @@ function BikeArt() {
       <circle cx="45" cy="88" r="28" fill="none" stroke="#9aa3ad" strokeWidth="1.5" />
       {Array.from({ length: 16 }, (_, i) => {
         const a = (i / 16) * Math.PI * 2;
-        return <line key={i} x1="45" y1="88" x2={45 + Math.cos(a) * 28} y2={88 + Math.sin(a) * 28} stroke="#b8bcc2" strokeWidth="0.5" />;
+        // Rounded so server and client render identical attribute strings.
+        const x2 = Math.round((45 + Math.cos(a) * 28) * 100) / 100;
+        const y2 = Math.round((88 + Math.sin(a) * 28) * 100) / 100;
+        return <line key={i} x1="45" y1="88" x2={x2} y2={y2} stroke="#b8bcc2" strokeWidth="0.5" />;
       })}
       <circle cx="45" cy="88" r="4" fill="#9aa3ad" />
       {/* tyre lever + hand */}

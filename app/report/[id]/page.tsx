@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ShieldCheck } from "lucide-react";
 import { HudPanel } from "@/components/hud";
-import { LogoMark } from "@/components/logo";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 import { shortName } from "@/lib/ai/models";
 import type { SessionEvent, TraceEntry } from "@/lib/schemas";
 import { store } from "@/lib/store";
@@ -83,7 +84,7 @@ export default async function ReportPage({ params }: Props) {
             {new Date(t0).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
             {session.mock && <span className="text-ask"> {"// mock"}</span>}
           </p>
-          <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight">{session.guide.title}</h1>
+          <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight sm:text-4xl">{session.guide.title}</h1>
         </div>
         <ShareButton />
       </div>
@@ -92,7 +93,7 @@ export default async function ReportPage({ params }: Props) {
         {stats.map((s) => (
           <div key={s.label} className="hud-panel p-4">
             <dt className="hud-label">{s.label}</dt>
-            <dd className={cn("text-glow mt-2 font-mono text-3xl tabular", s.tone)}>{s.value}</dd>
+            <dd className={cn("text-glow mt-2 font-mono text-2xl tabular sm:text-3xl", s.tone)}>{s.value}</dd>
           </div>
         ))}
       </dl>
@@ -194,19 +195,12 @@ function ModelsTable({ trace }: { trace: TraceEntry[] }) {
 
 function Shell({ children, wide }: { children: React.ReactNode; wide?: boolean }) {
   return (
-    <div className="hud-grid min-h-dvh">
-      <main className={cn("mx-auto flex min-h-dvh flex-col px-4 sm:px-6", wide ? "max-w-5xl" : "max-w-md")}>
-        <header className="flex items-center justify-between py-5">
-          <Link href="/" className="flex items-center gap-2.5">
-            <LogoMark className="size-5" />
-            <span className="font-mono text-xs tracking-[0.22em] uppercase">Second Hands</span>
-          </Link>
-          <Link href="/start" className="font-mono text-xs tracking-[0.14em] text-muted-foreground uppercase hover:text-hud">
-            Start a task →
-          </Link>
-        </header>
-        <div className={cn("flex flex-col gap-5 pb-16", wide ? "pt-6" : "flex-1 justify-center gap-3 pb-32")}>{children}</div>
+    <div className="hud-grid flex min-h-dvh flex-col">
+      <SiteHeader />
+      <main className={cn("mx-auto flex w-full flex-1 flex-col px-4 sm:px-6", wide ? "max-w-5xl" : "max-w-md")}>
+        <div className={cn("flex flex-col gap-5 pb-16", wide ? "pt-8" : "flex-1 justify-center gap-3 py-24")}>{children}</div>
       </main>
+      <SiteFooter />
     </div>
   );
 }

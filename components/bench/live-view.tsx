@@ -69,15 +69,15 @@ export function LiveView({
           <Corners size={22} className={cn(state === "idle" && "opacity-50")} />
         </div>
 
-        <div className="absolute top-5 left-5">
+        <div className="absolute top-3 left-3 sm:top-5 sm:left-5">
           <StateTag state={state} label={stale ? "Camera idle" : undefined} />
         </div>
-        <div className="absolute top-5 right-5 flex items-center gap-2 rounded-[3px] bg-black/60 px-2 py-1 font-mono text-[11px] tracking-[0.14em] text-white/75 uppercase backdrop-blur-sm">
+        <div className="absolute top-3 right-3 flex items-center gap-2 sm:top-5 sm:right-5 rounded-[3px] bg-black/60 px-2 py-1 font-mono text-[11px] tracking-[0.14em] text-white/75 uppercase backdrop-blur-sm">
           <span className={cn("size-1.5 rounded-full", stale ? "bg-idle" : "hud-blink bg-stop shadow-[0_0_6px_var(--stop)]")} />
           {source}
         </div>
         {telemetry && (
-          <div className="absolute top-14 right-5 rounded-[3px] bg-black/60 px-2 py-1 font-mono text-[11px] tracking-[0.12em] text-white/60 uppercase tabular">
+          <div className="absolute top-14 right-5 hidden rounded-[3px] bg-black/60 sm:block px-2 py-1 font-mono text-[11px] tracking-[0.12em] text-white/60 uppercase tabular">
             {telemetry}
           </div>
         )}

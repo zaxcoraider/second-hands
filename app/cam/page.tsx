@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { SiteHeader } from "@/components/site-header";
 
 /** Typed-code fallback for pairing, when scanning the QR code isn't possible. */
 export default function CamCodePage() {
@@ -10,7 +11,9 @@ export default function CamCodePage() {
   const clean = code.toLowerCase().replace(/[^a-z0-9]/g, "");
 
   return (
-    <main className="hud-grid flex min-h-dvh flex-col justify-center gap-6 bg-background p-6 text-foreground">
+    <div className="hud-grid flex min-h-dvh flex-col">
+    <SiteHeader />
+    <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 p-6 text-foreground">
       <div>
         <p className="hud-label mb-2">
           <span className="text-hud">Pair </span>{"// "}camera
@@ -46,5 +49,6 @@ export default function CamCodePage() {
         </button>
       </form>
     </main>
+    </div>
   );
 }

@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowRight, Bike, Check, ChefHat, Cpu, ExternalLink, Hammer, Loader2, Lock, Scissors, Trash2, Wrench, type LucideIcon } from "lucide-react";
 import { HudPanel } from "@/components/hud";
-import { LogoMark } from "@/components/logo";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { CATEGORIES, type CategoryId } from "@/lib/categories";
 import type { Guide, TraceEntry } from "@/lib/schemas";
@@ -100,23 +100,15 @@ export function StartClient() {
   const remove = (i: number) => setSteps((s) => s.filter((_, j) => j !== i));
 
   return (
-    <div className="hud-grid min-h-dvh">
-      <main className="mx-auto flex min-h-dvh max-w-3xl flex-col px-4 sm:px-6">
-        <header className="flex items-center justify-between py-5">
-          <Link href="/" className="flex items-center gap-2.5">
-            <LogoMark className="size-5" />
-            <span className="font-mono text-xs tracking-[0.22em] uppercase">Second Hands</span>
-          </Link>
-          <Link href="/try" className="font-mono text-xs tracking-[0.14em] text-muted-foreground uppercase hover:text-hud">
-            Sample run →
-          </Link>
-        </header>
+    <div className="hud-grid flex min-h-dvh flex-col">
+      <SiteHeader />
+      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 sm:px-6">
 
         <section className="flex flex-col gap-5 py-10">
           <p className="hud-label">
             <span className="text-hud">01 </span>{"// "}Define the job
           </p>
-          <label htmlFor="task" className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+          <label htmlFor="task" className="font-display text-[34px] leading-tight font-semibold tracking-tight sm:text-5xl">
             What are you working on?
           </label>
           <form
@@ -143,7 +135,7 @@ export function StartClient() {
               Find the guide
             </Button>
           </form>
-          <div className="flex flex-wrap gap-2" role="tablist" aria-label="Category">
+          <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0" role="tablist" aria-label="Category">
             {CATEGORIES.map((c) => {
               const Icon = ICONS[c.id];
               const on = c.id === categoryId;
@@ -154,7 +146,7 @@ export function StartClient() {
                   aria-selected={on}
                   onClick={() => setCategoryId(c.id)}
                   className={cn(
-                    "flex items-center gap-2 rounded-[4px] border px-3 py-2 text-sm transition-colors",
+                    "flex shrink-0 items-center gap-2 rounded-[4px] border px-3 py-2 text-sm whitespace-nowrap transition-colors",
                     on ? "glow-hud border-hud bg-hud/10 text-hud" : "bg-black/30 text-muted-foreground hover:border-hud/50 hover:text-foreground",
                   )}
                 >
@@ -297,6 +289,7 @@ export function StartClient() {
           </section>
         )}
       </main>
+      <SiteFooter />
     </div>
   );
 }

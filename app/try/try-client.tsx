@@ -190,17 +190,18 @@ export function TryClient() {
     mode === "intro" || mode === "starting" ? (
       <Button onClick={start} disabled={mode === "starting"}>
         {mode === "starting" ? <Loader2 className="animate-spin" data-icon="inline-start" /> : <Play data-icon="inline-start" />}
-        Run the sample
+        <span className="sm:hidden">Run</span>
+        <span className="hidden sm:inline">Run the sample</span>
       </Button>
     ) : reportId ? (
       <>
         <Button variant="outline" onClick={start}>
           <RotateCcw data-icon="inline-start" />
-          Run again
+          <span className="hidden sm:inline">Run again</span>
         </Button>
         <Link href={`/report/${reportId}`} className={buttonVariants()}>
           <FileText data-icon="inline-start" />
-          View report
+          Report
         </Link>
       </>
     ) : null;
@@ -245,10 +246,10 @@ export function TryClient() {
                 "group absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-black/60 text-white transition-colors hover:bg-black/50",
               )}
             >
-              <span className="glow-hud flex size-20 items-center justify-center rounded-full border-2 border-hud bg-hud/15 text-hud transition-transform group-hover:scale-105">
+              <span className="glow-hud flex size-16 items-center sm:size-20 justify-center rounded-full border-2 border-hud bg-hud/15 text-hud transition-transform group-hover:scale-105">
                 {mode === "starting" ? <Loader2 className="size-8 animate-spin" /> : <Play className="size-8 translate-x-0.5 fill-current" />}
               </span>
-              <span className="font-display text-2xl font-semibold tracking-tight">Run the sample</span>
+              <span className="font-display text-xl font-semibold tracking-tight sm:text-2xl">Run the sample</span>
               <span className="font-mono text-[11px] tracking-[0.16em] text-white/65 uppercase">~1 min · sound on · no setup</span>
             </button>
           )}

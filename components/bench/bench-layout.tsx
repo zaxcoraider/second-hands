@@ -62,8 +62,9 @@ export function BenchLayout({
             <span className="hidden font-mono text-xs tracking-[0.2em] uppercase sm:inline">Second Hands</span>
           </Link>
           <span aria-hidden className="hidden h-5 w-px bg-line sm:block" />
-          <h1 className="min-w-0 flex-1 truncate font-display text-lg font-semibold tracking-tight">{session.guide.title}</h1>
-          <dl className="flex items-center gap-5 font-mono text-xs tracking-[0.12em] uppercase tabular">
+          <h1 className="min-w-0 flex-1 truncate font-display text-base font-semibold tracking-tight sm:text-lg">{session.guide.title}</h1>
+          <div className="flex w-full items-center justify-between gap-4 sm:w-auto sm:justify-end sm:gap-6">
+          <dl className="flex items-center gap-3 font-mono text-[11px] tracking-[0.1em] uppercase tabular sm:gap-5 sm:text-xs">
             <div className="flex items-center gap-2">
               <span className={cn("size-2 rounded-full", connected ? "hud-blink bg-ok shadow-[0_0_8px_var(--ok)]" : "bg-idle")} />
               <dd className={connected ? "text-ok" : "text-muted-foreground"}>{connected ? "Live" : "Offline"}</dd>
@@ -80,7 +81,8 @@ export function BenchLayout({
               <dd className="rounded-[3px] border border-ask/50 px-1.5 py-0.5 text-[10px] text-ask">{badge ?? "Mock"}</dd>
             )}
           </dl>
-          {actions && <div className="flex gap-2">{actions}</div>}
+          {actions && <div className="flex shrink-0 gap-2">{actions}</div>}
+          </div>
         </div>
       </header>
 
@@ -99,7 +101,8 @@ export function BenchLayout({
           <Checklist session={session} />
         </HudPanel>
 
-        <div className="flex min-w-0 flex-col gap-4">
+        {/* On phones the camera view comes first; on desktop it's the middle column. */}
+        <div className="order-first flex min-w-0 flex-col gap-4 lg:order-none">
           {pairing ?? (
             <LiveView
               frame={latestFrame}
