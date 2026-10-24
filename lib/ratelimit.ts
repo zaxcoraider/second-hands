@@ -9,7 +9,7 @@ import { store } from "@/lib/store";
 type Kind = "session" | "frame" | "guide";
 
 const RULES: Record<Kind, { tokens: number; window: `${number} ${"s" | "m" | "h" | "d"}`; ms: number }> = {
-  session: { tokens: 3, window: "1 d", ms: 86_400_000 },
+  session: { tokens: 10, window: "1 d", ms: 86_400_000 },
   guide: { tokens: 10, window: "1 d", ms: 86_400_000 },
   frame: { tokens: 40, window: "1 m", ms: 60_000 },
 };
