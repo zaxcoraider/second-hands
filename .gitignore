@@ -1,0 +1,43 @@
+# --- Local planning docs (never pushed) ---
+prd.md
+architecture.md
+phases.md
+design.md
+memory.md
+hack-details.md
+
+# --- Secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Dependencies & builds ---
+node_modules/
+.pnpm-store/
+.next/
+out/
+build/
+dist/
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
+
+# --- Local HTTPS certs (next dev --experimental-https) ---
+certificates/
+
+# --- Eval raw recordings (large, may show faces/logos) ---
+eval/dataset/raw/
+
+# --- Logs & OS junk ---
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+.DS_Store
+.idea/
+.vscode/
+coverage/
+
+# --- Next.js extras ---
+*.pem
+.pnp
+.pnp.*
