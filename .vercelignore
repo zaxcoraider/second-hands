@@ -1,0 +1,13 @@
+# Local planning docs, secrets and dev certs never get uploaded
+prd.md
+architecture.md
+phases.md
+design.md
+memory.md
+hack-details.md
+.env
+.env.*
+!.env.example
+certificates/
+node_modules/
+.next/
