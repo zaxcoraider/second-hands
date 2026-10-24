@@ -6,6 +6,11 @@ import type { FrameResultBody } from "@/lib/client-types";
 
 export type FrameLoopStats = { sent: number; inflight: boolean; lastMs: number | null; diff: number };
 
+export type FrameLoop = FrameLoopStats & {
+  /** Send the next frame right away, ignoring the change detector ("check me now"). */
+  requestFrame: () => void;
+};
+
 /**
  * Sends a frame when the scene changes (or every few seconds), with at most one request in flight.
  * `onStop` fires for errors that mean "stop sending" (session finished, cap reached).
@@ -17,10 +22,11 @@ export function useFrameLoop(args: {
   onResult: (r: FrameResultBody) => void;
   onError?: (message: string) => void;
   onStop?: (message: string) => void;
-}): FrameLoopStats {
+}): FrameLoop {
   const [stats, setStats] = useState<FrameLoopStats>({ sent: 0, inflight: false, lastMs: null, diff: 0 });
   const cb = useRef(args);
   cb.current = args;
+  const force = useRef(false);
 
   useEffect(() => {
     if (!args.running) return;
@@ -34,12 +40,14 @@ export function useFrameLoop(args: {
       const video = cb.current.videoRef.current;
       const now = Date.now();
       if (stopped || inflight || !video || now < backoffUntil) return;
-      if (!detector.shouldSend(video, now)) {
+      const forced = force.current;
+      if (!forced && !detector.shouldSend(video, now)) {
         setStats((s) => ({ ...s, diff: detector.lastDiff }));
         return;
       }
       const image = grabFrame(video, canvas);
       if (!image) return;
+      force.current = false;
       detector.markSent(video, now);
       inflight = true;
       setStats((s) => ({ ...s, inflight: true, diff: detector.lastDiff }));
@@ -78,5 +86,5 @@ export function useFrameLoop(args: {
     };
   }, [args.running, args.sessionId]);
 
-  return stats;
+  return { ...stats, requestFrame: () => (force.current = true) };
 }

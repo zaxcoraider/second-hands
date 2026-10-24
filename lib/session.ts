@@ -29,6 +29,7 @@ export async function createSession(args: {
     mode: args.mode,
     mock: isMockAI(),
     frames: 0,
+    stepVersion: 0,
   };
   await store.saveSession(session);
 

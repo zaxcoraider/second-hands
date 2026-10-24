@@ -26,6 +26,8 @@ export const metadata: Metadata = {
   title: "Second Hands",
   description:
     "An AI that watches your hands while you repair, build or cook, and stops you before you make a mistake.",
+  applicationName: "Second Hands",
+  appleWebApp: { capable: true, title: "Second Hands", statusBarStyle: "black-translucent" },
 };
 
 export const viewport: Viewport = {

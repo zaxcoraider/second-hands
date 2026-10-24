@@ -115,9 +115,17 @@ export async function processFrame(session: Session, image: string): Promise<Fra
   return { events: out, observation: obs, currentStep: session.currentStep, status: session.status };
 }
 
-/** Don't resurrect a session that was finished while this frame was in flight. */
+/**
+ * Don't resurrect a session that was finished while this frame was in flight, and keep any
+ * manual step change (skip/back) made meanwhile instead of overwriting it.
+ */
 async function save(session: Session) {
   const latest = await store.getSession(session.id);
   if (latest?.status === "done") return;
+  if (latest && (latest.stepVersion ?? 0) !== (session.stepVersion ?? 0)) {
+    session.currentStep = latest.currentStep;
+    session.stepStatus = latest.stepStatus;
+    session.stepVersion = latest.stepVersion;
+  }
   await store.saveSession(session);
 }

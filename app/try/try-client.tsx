@@ -172,6 +172,7 @@ export function TryClient() {
         mode: "try",
         mock: false,
         frames: 0,
+        stepVersion: 0,
       },
       events: [],
       trace: [],

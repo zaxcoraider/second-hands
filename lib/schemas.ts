@@ -106,6 +106,8 @@ export const Session = z.object({
   mode: z.enum(["live", "try"]),
   mock: z.boolean(),
   frames: z.number().default(0),
+  /** Bumped on manual step changes, so an in-flight frame can't overwrite them. */
+  stepVersion: z.number().default(0),
   lastFrameAt: z.number().optional(),
   lastFrameId: z.string().optional(),
   summary: z.string().optional(),
