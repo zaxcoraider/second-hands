@@ -1,5 +1,8 @@
-import { PageStub } from "@/components/page-stub";
+import type { Metadata } from "next";
+import { StartClient } from "./start-client";
+
+export const metadata: Metadata = { title: "Start a repair · Second Hands" };
 
 export default function Page() {
-  return <PageStub title="Start a repair" phase="coming next" />;
+  return <StartClient />;
 }
