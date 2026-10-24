@@ -41,3 +41,8 @@ coverage/
 *.pem
 .pnp
 .pnp.*
+
+# --- Tool-generated agent files (Vercel marketplace) ---
+.agents/
+.claude/
+skills-lock.json
