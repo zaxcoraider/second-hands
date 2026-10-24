@@ -1,4 +1,4 @@
-import type { GateDecision, Guide, Observation, SessionEvent, Step, VerifyResult } from "@/lib/schemas";
+import type { Focus, GateDecision, Guide, Observation, SessionEvent, Step, VerifyResult } from "@/lib/schemas";
 import { REDMI_NOTE_8_BATTERY, findCuratedGuide } from "@/lib/mock/guides";
 
 /**
@@ -21,10 +21,21 @@ export function scriptedRole(guide: Guide, step: Step): "stop" | "ask" | null {
   return null;
 }
 
+// Where the hands are in the placeholder bench clip (768×576) for each Redmi step; the
+// scripted "display connector first" mistake happens at the LCD connector.
+const WORK_POINTS = [[640, 120], [250, 470], [330, 170], [330, 300], [445, 205], [320, 400], [400, 170], [330, 300]];
+const MISTAKE_POINT = [445, 205];
+
+function box([px, py]: number[], size = 120): Focus {
+  return { x: (px - size / 2) / 768, y: (py - size / 2) / 576, w: size / 768, h: size / 576 };
+}
+
 export function mockObserve(args: { frameId: string; guide: Guide; step: Step; k: number }): Observation {
   const { frameId, guide, step, k } = args;
   const role = scriptedRole(guide, step);
-  const base = { frameId, stepId: step.id, needCloserLook: false, visibility: "good" as const };
+  const index = guide.steps.findIndex((s) => s.id === step.id);
+  const focus = box(WORK_POINTS[index] ?? [384, 288]);
+  const base = { frameId, stepId: step.id, needCloserLook: false, visibility: "good" as const, focus };
 
   if (role) {
     const m = step.commonMistakes[0];
@@ -39,6 +50,7 @@ export function mockObserve(args: { frameId: string; guide: Guide; step: Step; k
           evidence: m.looksLike,
         },
         needCloserLook: role === "ask",
+        focus: role === "stop" ? box(MISTAKE_POINT, 110) : focus,
       };
     }
     if (k >= 5) return { ...base, stepState: "done", observation: step.visualCheck, mistake: null };

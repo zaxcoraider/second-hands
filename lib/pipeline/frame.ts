@@ -102,6 +102,7 @@ export async function processFrame(session: Session, image: string): Promise<Fra
           reason,
           verifiedBy,
           frameThumb: frameId,
+          focus: obs.focus ?? undefined,
           manualRef: `${step.title}: ${step.instruction}${mistake ? `\nCommon mistake: ${mistake.description}` : ""}`,
         });
       }

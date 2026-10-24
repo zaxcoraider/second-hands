@@ -38,6 +38,7 @@ export function replayAt(rec: SessionState, startedAt: number, elapsedMs: number
     overrides: rec.overrides.filter((o) => visible(o.at)),
     costUsd: trace.reduce((sum, t) => sum + t.costUsd, 0),
     latestFrame: null,
+    lastObservation: null,
   };
 }
 

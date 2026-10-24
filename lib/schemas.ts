@@ -27,6 +27,14 @@ export const Guide = z.object({
   steps: z.array(Step).min(1),
 });
 
+/** Normalized box (0-1, from the top-left of the frame) around the hands/tool and the part they're on. */
+export const Focus = z.object({
+  x: z.number().min(0).max(1),
+  y: z.number().min(0).max(1),
+  w: z.number().min(0).max(1),
+  h: z.number().min(0).max(1),
+});
+
 export const Observation = z.object({
   frameId: z.string(),
   stepId: z.string(),
@@ -37,6 +45,7 @@ export const Observation = z.object({
     .nullable(),
   needCloserLook: z.boolean().default(false),
   visibility: z.enum(["good", "poor"]).default("good"),
+  focus: Focus.nullable().default(null),
 });
 
 export const GateDecision = z.object({
@@ -63,6 +72,7 @@ export const SessionEvent = z.object({
   frameThumb: z.string().optional(),
   manualRef: z.string().optional(),
   verifiedBy: z.literal("ultra").optional(),
+  focus: Focus.optional(),
 });
 
 export const TraceEntry = z.object({
@@ -102,6 +112,7 @@ export type Step = z.infer<typeof Step>;
 export type Guide = z.infer<typeof Guide>;
 export type Source = z.infer<typeof Source>;
 export type Observation = z.infer<typeof Observation>;
+export type Focus = z.infer<typeof Focus>;
 export type GateDecision = z.infer<typeof GateDecision>;
 export type VerifyResult = z.infer<typeof VerifyResult>;
 export type EventKind = z.infer<typeof EventKind>;
@@ -118,5 +129,6 @@ export type SessionState = {
   overrides: Override[];
   costUsd: number;
   latestFrame: string | null;
+  lastObservation?: Observation | null;
   now?: number; // server time, set by GET /api/session/[id]
 };

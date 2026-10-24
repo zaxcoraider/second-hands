@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
@@ -8,6 +8,12 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
+});
+
+const grotesk = Space_Grotesk({
+  variable: "--font-grotesk",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
 });
 
 const jetbrains = JetBrains_Mono({
@@ -24,8 +30,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F6F6F4" },
-    { media: "(prefers-color-scheme: dark)", color: "#0E0F11" },
+    { media: "(prefers-color-scheme: light)", color: "#06080B" },
+    { media: "(prefers-color-scheme: dark)", color: "#06080B" },
   ],
 };
 
@@ -35,9 +41,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrains.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`dark ${inter.variable} ${grotesk.variable} ${jetbrains.variable}`}>
       <body className="antialiased">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" forcedTheme="dark" disableTransitionOnChange>
           {children}
           <Toaster />
         </ThemeProvider>

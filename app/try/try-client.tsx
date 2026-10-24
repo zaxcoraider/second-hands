@@ -206,10 +206,10 @@ export function TryClient() {
     ) : null;
 
   const banner = (
-    <div className="border-b bg-surface-2">
-      <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-x-6 gap-y-1 px-4 py-2.5 text-sm">
+    <div className="border-b border-hud/20 bg-hud/[0.05]">
+      <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-x-6 gap-y-1 px-4 py-2.5 text-sm">
         <p>
-          <span className="font-medium">Sample run.</span>{" "}
+          <span className="mr-2 font-mono text-[11px] tracking-[0.16em] text-hud uppercase">Sample run</span>
           <span className="text-muted-foreground">
             {mode === "replay"
               ? reason
@@ -231,7 +231,9 @@ export function TryClient() {
       now={mode === "live" ? now() : Date.now()}
       actions={actions}
       banner={banner}
-      badge={mode === "replay" ? "REPLAY" : undefined}
+      badge={mode === "replay" ? "Replay" : undefined}
+      mediaRef={videoRef}
+      source="Sample clip"
       live={
         <div className="relative size-full">
           <video ref={videoRef} muted playsInline autoPlay loop className="size-full object-cover" />
@@ -240,14 +242,14 @@ export function TryClient() {
               onClick={start}
               disabled={mode === "starting"}
               className={cn(
-                "absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/55 text-white transition-colors hover:bg-black/45",
+                "group absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-black/60 text-white transition-colors hover:bg-black/50",
               )}
             >
-              <span className="flex size-16 items-center justify-center rounded-full bg-white text-black">
-                {mode === "starting" ? <Loader2 className="size-7 animate-spin" /> : <Play className="size-7 translate-x-0.5" />}
+              <span className="glow-hud flex size-20 items-center justify-center rounded-full border-2 border-hud bg-hud/15 text-hud transition-transform group-hover:scale-105">
+                {mode === "starting" ? <Loader2 className="size-8 animate-spin" /> : <Play className="size-8 translate-x-0.5 fill-current" />}
               </span>
-              <span className="text-lg font-medium">Run the sample</span>
-              <span className="text-sm text-white/70">About a minute. Turn your sound on.</span>
+              <span className="font-display text-2xl font-semibold tracking-tight">Run the sample</span>
+              <span className="font-mono text-[11px] tracking-[0.16em] text-white/65 uppercase">~1 min · sound on · no setup</span>
             </button>
           )}
         </div>

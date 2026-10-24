@@ -10,6 +10,7 @@ const obs = (p: Partial<Observation> = {}): Observation => ({
   mistake: null,
   needCloserLook: false,
   visibility: "good",
+  focus: null,
   ...p,
 });
 const m = (type: string, confidence = 0.9) => ({ type, confidence, evidence: "seen" });

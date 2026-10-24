@@ -43,12 +43,13 @@ export async function createSession(args: {
 export async function getState(id: string, opts: { frame?: boolean } = {}): Promise<SessionState | null> {
   const session = await store.getSession(id);
   if (!session) return null;
-  const [events, trace, overrides, costUsd, latestFrame] = await Promise.all([
+  const [events, trace, overrides, costUsd, latestFrame, obs] = await Promise.all([
     store.getEvents(id, 50),
     store.getTrace(id, 60),
     store.getOverrides(id),
     store.getSessionCost(id),
     opts.frame ? store.getLatestFrame(id) : Promise.resolve(null),
+    store.getObservations(id, 1),
   ]);
-  return { session, events, trace, overrides, costUsd, latestFrame };
+  return { session, events, trace, overrides, costUsd, latestFrame, lastObservation: obs[0] ?? null };
 }

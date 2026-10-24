@@ -9,7 +9,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains);
-  --font-heading: var(--font-inter);
+  --font-display: var(--font-grotesk);
+  --font-heading: var(--font-grotesk);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -27,12 +28,14 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
 
-  /* Second Hands state colors: only for AI states, never decoration */
+  /* HUD colors. ok / ask / stop / idle are reserved for AI states. */
+  --color-hud: var(--hud);
   --color-ok: var(--ok);
   --color-ask: var(--ask);
   --color-stop: var(--stop);
   --color-idle: var(--idle);
   --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -41,32 +44,32 @@
   --radius-2xl: calc(var(--radius) * 1.8);
 }
 
-/* Tokens from design.md. shadcn variable names map onto them. */
-:root {
-  --bg: #f6f6f4;
-  --surface: #ffffff;
-  --surface-2: #efefec;
-  --line: #dcdcd7;
-  --text: #141518;
-  --text-muted: #5d6168;
-  --brand: #0b6bcb;
-  --ok: #1e8e4f;
-  --ask: #b26b00;
-  --stop: #c62828;
-  --idle: #8a8f96;
-  --primary-foreground: #ffffff;
-}
-
-/* Re-declared under .dark too, so a nested .dark wrapper (the phone page) re-resolves them. */
+/*
+ * Second Hands HUD theme. Dark only: the product is a heads-up display for a workbench.
+ * Declared on both :root and .dark so shadcn's dark variants and nested wrappers resolve the same.
+ */
 :root,
 .dark {
+  --bg: #06080b;
+  --surface: #0c1015;
+  --surface-2: #121820;
+  --line: #1c2631;
+  --text: #e8eef4;
+  --text-muted: #7d8a97;
+  --hud: #2ee6ff; /* interactive + HUD chrome */
+  --ok: #3dffa0;
+  --ask: #ffb224;
+  --stop: #ff4848;
+  --idle: #4f5d6b;
+
   --background: var(--bg);
   --foreground: var(--text);
   --card: var(--surface);
   --card-foreground: var(--text);
   --popover: var(--surface);
   --popover-foreground: var(--text);
-  --primary: var(--brand);
+  --primary: var(--hud);
+  --primary-foreground: #031014;
   --secondary: var(--surface-2);
   --secondary-foreground: var(--text);
   --muted: var(--surface-2);
@@ -76,23 +79,9 @@
   --destructive: var(--stop);
   --border: var(--line);
   --input: var(--line);
-  --ring: var(--brand);
-  --radius: 0.625rem;
-}
-
-.dark {
-  --bg: #0e0f11;
-  --surface: #17191c;
-  --surface-2: #1f2226;
-  --line: #2a2e33;
-  --text: #ecedee;
-  --text-muted: #9aa0a6;
-  --brand: #4ba3ff;
-  --ok: #3dd68c;
-  --ask: #ffb224;
-  --stop: #ff5a52;
-  --idle: #5b6168;
-  --primary-foreground: #0e0f11;
+  --ring: var(--hud);
+  --radius: 0.375rem;
+  color-scheme: dark;
 }
 
 @layer base {
@@ -108,15 +97,105 @@
   .tabular {
     font-variant-numeric: tabular-nums;
   }
+  ::selection {
+    background: color-mix(in oklab, var(--hud) 35%, transparent);
+  }
 }
 
-@keyframes sh-pulse {
-  0%, 100% { opacity: 0.55; }
+/* ---------- HUD utilities ---------- */
+
+/* Faint blueprint grid behind pages */
+.hud-grid {
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--hud) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--hud) 5%, transparent) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Mono micro-label: "01 // STEPS" */
+.hud-label {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Panel with a hairline border */
+.hud-panel {
+  position: relative;
+  background: color-mix(in oklab, var(--surface) 88%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+/* Glows, keyed to the state colors */
+.glow-hud { box-shadow: 0 0 0 1px color-mix(in oklab, var(--hud) 45%, transparent), 0 0 28px -6px color-mix(in oklab, var(--hud) 55%, transparent); }
+.glow-ok { box-shadow: 0 0 0 1px color-mix(in oklab, var(--ok) 50%, transparent), 0 0 32px -6px color-mix(in oklab, var(--ok) 60%, transparent); }
+.glow-ask { box-shadow: 0 0 0 1px color-mix(in oklab, var(--ask) 55%, transparent), 0 0 32px -6px color-mix(in oklab, var(--ask) 60%, transparent); }
+.glow-stop { box-shadow: 0 0 0 1px color-mix(in oklab, var(--stop) 60%, transparent), 0 0 40px -4px color-mix(in oklab, var(--stop) 70%, transparent); }
+.text-glow { text-shadow: 0 0 18px color-mix(in oklab, currentColor 60%, transparent); }
+
+/* Scan line sweeping down a camera view */
+@keyframes hud-scan {
+  0% { transform: translateY(-10%); opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { transform: translateY(1000%); opacity: 0; }
+}
+.hud-scan {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 10%;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, color-mix(in oklab, var(--hud) 22%, transparent) 85%, color-mix(in oklab, var(--hud) 70%, transparent));
+  animation: hud-scan 3.2s linear infinite;
+}
+
+/* Fine horizontal scanlines over video */
+.hud-lines {
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 3px);
+}
+
+@keyframes hud-pulse {
+  0%, 100% { opacity: 0.45; }
   50% { opacity: 1; }
 }
-.sh-pulse {
-  animation: sh-pulse 2.4s ease-in-out infinite;
+.hud-pulse { animation: hud-pulse 1.6s ease-in-out infinite; }
+
+@keyframes hud-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.15; }
 }
+.hud-blink { animation: hud-blink 1s steps(1) infinite; }
+
+/* Alert plate entering: a short glitch */
+@keyframes hud-glitch {
+  0% { transform: translateX(-6px) skewX(-6deg); opacity: 0; clip-path: inset(40% 0 35% 0); }
+  25% { transform: translateX(4px); opacity: 1; clip-path: inset(10% 0 60% 0); }
+  50% { transform: translateX(-2px); clip-path: inset(55% 0 5% 0); }
+  75% { transform: translateX(1px); clip-path: inset(0 0 0 0); }
+  100% { transform: none; opacity: 1; clip-path: inset(0 0 0 0); }
+}
+.hud-glitch { animation: hud-glitch 320ms steps(4) both; }
+
+/* Red flash across the whole screen on STOP */
+@keyframes hud-flash {
+  0% { opacity: 0.55; }
+  100% { opacity: 0; }
+}
+.hud-flash { animation: hud-flash 900ms ease-out both; }
+
+/* Focus box draw-in */
+@keyframes hud-lock {
+  0% { transform: scale(1.25); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.hud-lock { animation: hud-lock 260ms ease-out both; }
+
 @media (prefers-reduced-motion: reduce) {
-  .sh-pulse { animation: none; }
+  .hud-scan, .hud-pulse, .hud-blink, .hud-glitch, .hud-flash, .hud-lock { animation: none; }
+  .hud-scan { display: none; }
 }

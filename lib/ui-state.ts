@@ -4,11 +4,22 @@ import type { SessionEvent } from "@/lib/schemas";
 /** The AI state shown by the status ring, the phone and event cards. Color + icon + text, never color alone. */
 export type AiState = "idle" | "ok" | "ask" | "stop";
 
-export const STATE: Record<AiState, { label: string; icon: LucideIcon; text: string; border: string; bg: string }> = {
-  idle: { label: "Watching", icon: Eye, text: "text-idle", border: "border-idle", bg: "bg-idle" },
-  ok: { label: "Step done", icon: CircleCheck, text: "text-ok", border: "border-ok", bg: "bg-ok" },
-  ask: { label: "Checking", icon: HelpCircle, text: "text-ask", border: "border-ask", bg: "bg-ask" },
-  stop: { label: "Stop", icon: OctagonX, text: "text-stop", border: "border-stop", bg: "bg-stop" },
+type StateMeta = {
+  label: string; // plain words
+  hud: string; // HUD chrome label
+  icon: LucideIcon;
+  text: string;
+  border: string;
+  borderSoft: string;
+  bg: string;
+  glow: string;
+};
+
+export const STATE: Record<AiState, StateMeta> = {
+  idle: { label: "Watching", hud: "Scanning", icon: Eye, text: "text-hud", border: "border-hud/40", borderSoft: "border-hud/30", bg: "bg-hud", glow: "" },
+  ok: { label: "Step done", hud: "Step done", icon: CircleCheck, text: "text-ok", border: "border-ok", borderSoft: "border-ok/50", bg: "bg-ok", glow: "glow-ok" },
+  ask: { label: "Checking", hud: "Check", icon: HelpCircle, text: "text-ask", border: "border-ask", borderSoft: "border-ask/50", bg: "bg-ask", glow: "glow-ask" },
+  stop: { label: "Stop", hud: "Stop", icon: OctagonX, text: "text-stop", border: "border-stop", borderSoft: "border-stop/60", bg: "bg-stop", glow: "glow-stop" },
 };
 
 export function stateOfEvent(kind: SessionEvent["kind"]): AiState {

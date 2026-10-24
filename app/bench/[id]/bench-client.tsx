@@ -64,7 +64,10 @@ export function BenchClient({ id }: { id: string }) {
         }
         pairing={
           data.session.frames === 0 ? (
-            <div className="flex flex-col items-center gap-6 rounded-xl border bg-card px-4 py-10">
+            <div className="hud-panel flex flex-col items-center gap-6 px-4 py-10">
+              <p className="hud-label">
+                <span className="text-hud">02 </span>{"// "}Pair a camera
+              </p>
               <QrPair id={id} connected={connected} />
               <p className="max-w-sm text-center text-sm text-muted-foreground">
                 Mount the phone 15–20 cm above your work, camera facing down, and tap Start on it.
@@ -81,7 +84,7 @@ export function BenchClient({ id }: { id: string }) {
           role="dialog"
           aria-label="Connect phone"
         >
-          <div className="relative rounded-xl border bg-card p-8 shadow-lg" onClick={(e) => e.stopPropagation()}>
+          <div className="hud-panel glow-hud relative p-8" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => setShowQr(false)}
               className="absolute top-3 right-3 text-muted-foreground hover:text-foreground"
