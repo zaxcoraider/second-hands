@@ -1,114 +1,191 @@
 <p align="center">
-  <img src="docs/banner.svg" alt="Second Hands: an AI that watches your hands and stops you before you break something" width="100%">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/logo-dark.png">
+    <img src="docs/logo-light.png" alt="Second Hands" width="520">
+  </picture>
+</p>
+
+<h3 align="center">An AI that watches your hands while you repair, build or cook,<br>and stops you before you ruin it.</h3>
+
+<p align="center">
+  <a href="https://second-hands-seven.vercel.app/try"><img alt="Try it live" src="https://img.shields.io/badge/▶_Try_it_live-no_setup-FF4848?style=for-the-badge&labelColor=0B0D10"></a>
+  <a href="https://second-hands-seven.vercel.app"><img alt="Website" src="https://img.shields.io/badge/Website-second--hands-2EE6FF?style=for-the-badge&labelColor=0B0D10"></a>
+  <a href="https://second-hands-seven.vercel.app/cam"><img alt="Install the phone app" src="https://img.shields.io/badge/📱_Phone_app-installable-3DFFA0?style=for-the-badge&labelColor=0B0D10"></a>
 </p>
 
 <p align="center">
-  <a href="https://second-hands-seven.vercel.app/try"><img alt="Try it live" src="https://img.shields.io/badge/▶_Try_it_live-no_setup-FF5A52?style=for-the-badge&labelColor=17191C"></a>
-  <a href="https://second-hands-seven.vercel.app"><img alt="Website" src="https://img.shields.io/badge/Website-second--hands-4BA3FF?style=for-the-badge&labelColor=17191C"></a>
+  <img alt="NVIDIA Nemotron × 4" src="https://img.shields.io/badge/NVIDIA-Nemotron_×_4-76B900?style=flat-square&labelColor=0B0D10">
+  <img alt="Nebius Token Factory" src="https://img.shields.io/badge/Nebius-Token_Factory-E8EEF4?style=flat-square&labelColor=0B0D10">
+  <img alt="Tavily" src="https://img.shields.io/badge/Tavily-search_+_extract-E8EEF4?style=flat-square&labelColor=0B0D10">
+  <img alt="Track: Physical AI" src="https://img.shields.io/badge/Track-Physical_AI-FFB224?style=flat-square&labelColor=0B0D10">
+  <img alt="Next.js 15" src="https://img.shields.io/badge/Next.js-15-E8EEF4?style=flat-square&labelColor=0B0D10">
+  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/License-MIT-E8EEF4?style=flat-square&labelColor=0B0D10"></a>
 </p>
 
 <p align="center">
-  <img alt="NVIDIA Nemotron" src="https://img.shields.io/badge/NVIDIA-Nemotron_×_4-76B900?style=flat-square&labelColor=17191C">
-  <img alt="Nebius Token Factory" src="https://img.shields.io/badge/Nebius-Token_Factory-ECEDEE?style=flat-square&labelColor=17191C">
-  <img alt="Tavily" src="https://img.shields.io/badge/Tavily-search_+_extract-ECEDEE?style=flat-square&labelColor=17191C">
-  <img alt="Next.js 15" src="https://img.shields.io/badge/Next.js-15-ECEDEE?style=flat-square&labelColor=17191C">
-  <img alt="Track: Physical AI" src="https://img.shields.io/badge/Track-Physical_AI-FFB224?style=flat-square&labelColor=17191C">
-  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/License-MIT-ECEDEE?style=flat-square&labelColor=17191C"></a>
+  <a href="#-see-it-work">See it work</a> ·
+  <a href="#-how-it-works">How it works</a> ·
+  <a href="#-how-nemotron-and-token-factory-are-used">Nemotron + Token Factory</a> ·
+  <a href="#-how-tavily-is-used">Tavily</a> ·
+  <a href="#-roadmap">Roadmap</a> ·
+  <a href="#-run-locally">Run locally</a>
 </p>
 
 <p align="center">
-  <a href="#how-it-works">How it works</a> ·
-  <a href="#how-nemotron-and-token-factory-are-used">Nemotron + Token Factory</a> ·
-  <a href="#how-tavily-is-used">Tavily</a> ·
-  <a href="#try-it">Try it</a> ·
-  <a href="#run-locally">Run locally</a>
+  <img src="docs/screens/landing.png" alt="The Second Hands website: an AI that watches your hands and stops you before you ruin it" width="100%">
 </p>
 
 ---
 
-Point any phone at your work: a phone repair, a cutting board, a flat-pack bookshelf. **Second Hands** finds the real guide on the web, turns it into steps a camera can check, watches every step, and speaks up only when it matters:
+Mount any phone above your work: a phone repair, a cutting board, a flat-pack bookshelf. **Second Hands** finds the real guide on the web, turns it into steps a camera can check, watches every step, and speaks up only when it matters:
 
 <p align="center"><b><i>"Stop. Disconnect the battery connector first."</i></b></p>
 
 | 🔍 **Finds the guide** | 👁 **Watches your hands** | 🗣 **Speaks up when it matters** |
-|---|---|---|
-| Tavily pulls real repair guides at runtime. Nemotron Super turns them into steps a camera can verify. | Nemotron Super VL checks each frame against the manual step you're on. | Nano decides whether to interrupt. Ultra double-checks the evidence before it ever says "Stop." |
+|:---|:---|:---|
+| Tavily pulls real guides at runtime. Nemotron Super turns them into steps a camera can verify. | Nemotron Super VL checks each frame against the step you're on and boxes what it's looking at. | Nano decides whether to interrupt. Ultra double-checks the evidence before it ever says "Stop." |
+
+## 📸 See it work
+
+<table>
+  <tr>
+    <td align="center" width="25%"><img src="docs/screens/phone-pair.png" alt="Pair by scanning the laptop's QR code"><br><sub><b>1 · Pair</b><br>Scan the QR on the laptop</sub></td>
+    <td align="center" width="25%"><img src="docs/screens/phone-setup.png" alt="Camera check for light and focus before starting"><br><sub><b>2 · Camera check</b><br>Light and focus, flashlight</sub></td>
+    <td align="center" width="25%"><img src="docs/screens/phone-stop.png" alt="A verified STOP: disconnect the battery connector first"><br><sub><b>3 · Stop</b><br>Verified by Nemotron Ultra</sub></td>
+    <td align="center" width="25%"><img src="docs/screens/phone-ask.png" alt="When unsure it asks: is that the long screw?"><br><sub><b>4 · Ask</b><br>Unsure? It asks. "I'm right" overrides.</sub></td>
+  </tr>
+</table>
 
 <p align="center">
-  <img src="docs/dashboard.png" alt="The dashboard catching a mistake: the frame it saw next to the manual step, verified by Nemotron Ultra, with the agent trace of every model call" width="100%">
-  <br><sub>The bench dashboard mid-catch: what the AI saw next to what the manual says, verified by Ultra, with every model call in the agent trace.</sub>
+  <img src="docs/screens/dashboard.png" alt="The bench dashboard mid-catch: the frame it saw next to the manual step, verified by Ultra, with every model call in the agent trace" width="100%">
+  <br><sub>The bench dashboard mid-catch: what the AI saw next to what the manual says, verified by Ultra, with every Token Factory call in the agent trace.</sub>
 </p>
 
-## The problem
+## 🧩 The problem
 
-One wrong move in a repair costs real money, and nobody is watching:
+One wrong move in a hands-on job costs real money, or a finger, and nobody is watching:
 
-- 🔋 **Unplugging the display while the battery is connected** can short the board.
+- 🔋 **Unplugging a phone's display while the battery is connected** can short the board.
 - 🔩 **A long screw in a short hole** can crack the board underneath.
-- 🔥 **Prying a lithium battery with metal** can start a fire.
+- 🔪 **Flat fingers in front of a knife** is how most kitchen cuts happen.
+- 🪚 **A bookshelf without its anti-tip strap** can fall on a child.
 
 Manuals and videos can't see what *you* are doing. An expert next to you can, but experts are expensive, and a repair shop owner can't watch every apprentice all day. **Second Hands is that expert, sitting above the bench.**
 
-**Built for** phone repair apprentices and beginners first (shaped with input from a working phone repair shop), where one slip costs a customer's phone. The same loop works for **any hands-on task with a guide**:
+**Built for** phone repair apprentices first (shaped with input from a working phone repair shop), where one slip costs a customer's phone. The same loop works for any hands-on task with a guide:
 
-| Electronics repair | Cooking | Furniture & woodwork | Home fixes | Bikes | Crafts |
-|---|---|---|---|---|---|
+| 🔌 Electronics | 🍳 Cooking | 🪚 Furniture | 🏠 Home fixes | 🚲 Bikes | ✂️ Crafts |
+|:---:|:---:|:---:|:---:|:---:|:---:|
 | battery first, no metal on connectors | claw grip, cut away from your hand | panels the right way round, anti-tip strap | tap cartridges, drywall patches | flats, brakes, chains | soldering, sewing |
 
 Tasks where a missed warning could seriously hurt someone (mains electrical, gas, vehicle brakes, firearms) are refused.
 
-## How it works
+## ✨ What's in the box
+
+**📱 The phone app** (installable, no app store)
+- Full-screen HUD over the live camera: segmented step bar, scan line, and a **focus box** drawn from the vision model's output
+- **Pair in a second:** scan the laptop's QR (native `BarcodeDetector`, jsQR fallback) or type the 8-character code
+- **Camera check** before starting (light, focus) and a **flashlight** toggle
+- **Hands-free voice commands:** *"skip"*, *"back"*, *"repeat"*, *"check"*, *"I'm right"*, *"pause"*. It never reacts to its own voice.
+- **Manual controls:** Back · Check now · Skip · Pause, so the person stays in charge
+- Spoken warnings with a chime before every *Stop*; the screen stays awake
+
+**💻 The bench dashboard**
+- Procedure checklist, live view, **evidence panel** (the frame next to the manual step), console-style event log
+- **Agent trace:** every Token Factory call with stage, model, latency, tokens and cost
+- **Session report:** steps done, mistakes caught, false alarms, duration, cost, and a timeline with the frame behind every warning
+
+**🧪 Built to be judged**
+- [`/try`](https://second-hands-seven.vercel.app/try): one click runs the same pipeline on a sample clip, with a clearly labelled recorded replay if the daily demo budget is used up
+- Per-IP limits, a daily budget cap and a 5-minute cap per live session keep the public demo up through judging
+
+## ⚙️ How it works
 
 | | Step | What happens |
-|---|---|---|
-| 1 | **Start** · `/start` | Pick a category and type the job (*"Redmi Note 8 battery replacement"*, *"Dice an onion safely"*). Tavily finds real guides; Nemotron builds the checklist with what "done" looks like *from above*, the costly mistakes to watch for, and where to put the camera. Edit it, then start. |
-| 2 | **Pair** · `/bench` | Scan the QR code with any phone. It opens `/cam` with the rear camera. No app to install. |
-| 3 | **Work** | The phone sends a frame whenever the scene changes. The dashboard shows the live view, checklist, events and an agent trace of every model call. |
+|:-:|---|---|
+| 1 | **Start** · `/start` | Pick a category and type the job (*"Redmi Note 8 battery replacement"*, *"Dice an onion safely"*). Tavily finds real guides; Nemotron builds the checklist with what "done" looks like *from above*, the costly mistakes to watch for, and where to put the camera. |
+| 2 | **Pair** · `/cam` | Scan the QR with any phone (or install the app). Camera check, then it starts watching. |
+| 3 | **Watch** | The phone sends a frame whenever the scene changes. The dashboard shows the live view, checklist, events and every model call. |
 | 4 | **Catch** | The same mistake in 2 of the last 3 frames → Nano decides if it's worth interrupting → on high-severity steps Ultra verifies → the phone chimes: **"Stop."** |
-| 5 | **Ask** | When unsure, it asks instead: *"Is that the long screw? Hold it closer."* |
-| 6 | **Override** | Tap **I'm right** and it stops warning about that on this step. |
-| 7 | **Report** · `/report` | Steps done, mistakes caught, false alarms, duration, model cost, and a timeline with the frame behind every warning. |
+| 5 | **Ask** | When unsure, it asks instead: *"Is that the long screw? Hold it closer."* **I'm right** silences it for that step. |
+| 6 | **Report** · `/report` | Steps done, mistakes caught, false alarms, duration, cost, and the evidence timeline. |
 
 <p align="center">
   <img src="docs/architecture.svg" alt="Architecture: clients, the guide, frame and report pipelines on Vercel, and Token Factory, Tavily and Upstash Redis" width="100%">
 </p>
 
-## How Nemotron and Token Factory are used
+## 🧠 How Nemotron and Token Factory are used
 
 Every model call runs through **Nebius Token Factory** at runtime ([`lib/ai/client.ts`](lib/ai/client.ts)). Four **NVIDIA Nemotron** models each get one job, sized to it:
 
 | Role | Model | Job | Why this size |
 |---|---|---|---|
-| 👁 **Eyes** | `Nemotron-3.5-Super-VL` | Each frame + the current manual step → structured observation: step state, possible mistake, confidence, evidence | The NVIDIA vision model on Token Factory, strong enough to read small parts on a board |
+| 👁 **Eyes** | `Nemotron-3.5-Super-VL` | Each frame + the current manual step → structured observation: step state, possible mistake, confidence, evidence, and a focus box | The NVIDIA vision model on Token Factory, strong enough to read small parts on a board |
 | ⚡ **Gatekeeper** | `Nemotron-3-Nano-30B-A3B` | *Warn / ask / stay silent*, and writes the ≤15-word spoken line | Runs on every confirmed candidate, so it has to be fast and cheap. Reasoning off. |
-| 🧭 **Planner** | `nemotron-3-super-120b-a12b` | Tavily-fetched guide → camera-checkable steps; end-of-session summary | Long-context reading and careful structure, once or twice per session |
-| ⚖️ **Judge** | `Nemotron-3-Ultra-550b-a55b` | Verifies high-severity warnings across recent frames before any "Stop" | A false stop kills trust, a missed one kills a device. The biggest model, reasoning on, for this call only. |
+| 🧭 **Planner** | `nemotron-3-super-120b-a12b` | Tavily-fetched guide → camera-checkable steps, camera setup tip, safety refusals; end-of-session summary | Long-context reading and careful structure, once or twice per session |
+| ⚖️ **Judge** | `Nemotron-3-Ultra-550b-a55b` | Verifies high-severity warnings across recent frames before any "Stop" | A false stop kills trust, a missed one breaks a device or a finger. The biggest model, reasoning on, for this call only. |
 
 **What keeps it accurate and cheap:**
-
 - **Confirmation is code, not a model.** A mistake must show in 2 of the last 3 frames, isn't repeated within 25 s, and is silenced by an override ([`confirm.ts`](lib/pipeline/confirm.ts), unit-tested).
-- **No invented alarms.** The vision model can only flag mistake types the manual lists.
-- **Ultra only when it matters.** High-severity steps only. If it doesn't confirm, the warning becomes a question.
+- **No invented alarms.** The vision model can only flag mistake types the guide lists.
+- **Ultra only when it matters.** High-severity steps only; if it doesn't confirm, the warning becomes a question.
 - **Validated output.** Every model response is checked with zod, retried once, then falls back safely.
-- **Frames only on change.** A 32×32 change detector plus a heartbeat, with one request in flight.
+- **Frames only on change.** A 32×32 change detector plus a heartbeat, one request in flight.
 - **Full transparency.** Every call is traced (stage, model, latency, tokens, $) live on the dashboard and in the report.
 
 > **Measured latency and cost:** pending the real-model evaluation. This section will show measured numbers only; nothing here is estimated.
 
-## How Tavily is used
+## 🔎 How Tavily is used
 
-Tavily is the product's source of truth, not decoration. At runtime, `/api/guide` calls **Tavily Search** (`search_depth: advanced`) to find real repair guides for the exact device and job, then **Tavily Extract** to pull the full text of the top results. Nemotron turns that text into the checklist, and the source links are shown before you start ([`lib/tavily.ts`](lib/tavily.ts), [`lib/pipeline/guide.ts`](lib/pipeline/guide.ts)). Hand-checked guides for the demo devices are only a fallback if search fails.
+Tavily is the product's source of truth, not decoration. At runtime, `/api/guide` calls **Tavily Search** (`search_depth: advanced`) for real guides for the exact device and job, then **Tavily Extract** for the full text of the top results. Nemotron turns that text into the checklist, and the source links are shown before you start ([`lib/tavily.ts`](lib/tavily.ts), [`lib/pipeline/guide.ts`](lib/pipeline/guide.ts)). Hand-checked guides for the demo tasks are only a fallback if search fails.
 
-## Try it
+## 🚀 Try it
 
 | | |
 |---|---|
-| ▶ **No setup** | Open **[/try](https://second-hands-seven.vercel.app/try)** and press *Run the sample*: the same pipeline on a sample clip, ending in a report. If the day's demo budget is used up, it plays a clearly labelled recorded run. |
-| 📱 **With a phone** | Open **[/start](https://second-hands-seven.vercel.app/start)** on a laptop, pick an example, start the session, and scan the QR code. |
+| ▶ **No setup** | Open **[/try](https://second-hands-seven.vercel.app/try)** and press *Run the sample*: the same pipeline on a sample clip, ending in a report. |
+| 📱 **With a phone** | Open **[/start](https://second-hands-seven.vercel.app/start)** on a laptop, pick a task, start the session, and scan the QR with the phone. On Android, install the app from **[/cam](https://second-hands-seven.vercel.app/cam)**. |
 
 No login anywhere.
 
-## Run locally
+## 🗺 Roadmap
+
+<table>
+  <tr>
+    <th width="33%">✅ Shipped</th>
+    <th width="33%">🔜 Next · Nov–Dec 2026</th>
+    <th width="34%">🧭 2027</th>
+  </tr>
+  <tr valign="top">
+    <td>
+      • Guide builder with Tavily + Nemotron<br>
+      • Live frame loop: Super VL → 2-of-3 confirm → Nano → Ultra<br>
+      • Phone HUD with focus box and spoken warnings<br>
+      • Installable phone app, QR pairing<br>
+      • Voice commands, flashlight, camera check<br>
+      • Manual Back / Check / Skip<br>
+      • 6 task categories + safety refusals<br>
+      • Bench dashboard, agent trace, session report<br>
+      • Zero-setup <code>/try</code> with replay fallback
+    </td>
+    <td>
+      • <b>Measured eval</b>: catch rate, false alarms, latency and cost on real repairs, published here<br>
+      • <b>Hindi and multilingual voice</b>: warnings translated by Nemotron for repair shops in India and beyond<br>
+      • <b>Phone-only mode</b>: pick a task and start watching with no laptop<br>
+      • <b>Highlight clips</b>: a short video of every catch in the report<br>
+      • <b>Shop mode</b>: one owner, many benches on one dashboard
+    </td>
+    <td>
+      • <b>On-device vision</b> on Jetson-class edge hardware for sub-second warnings and offline benches<br>
+      • <b>Guide library</b>: guides verified by technicians and reused by everyone<br>
+      • <b>Skill reports</b>: how an apprentice improves over weeks, for shops and lab teachers<br>
+      • <b>AR pointer</b>: highlight the exact connector or screw hole to touch next<br>
+      • <b>Clip-on mount kit</b> for any phone
+    </td>
+  </tr>
+</table>
+
+## 🛠 Run locally
 
 ```bash
 pnpm install
@@ -143,7 +220,7 @@ openssl req -x509 -newkey rsa:2048 -nodes -days 30 \
 pnpm dev:https
 ```
 
-Open `https://<your-LAN-IP>:3000/start` on the laptop, accept the certificate warning on both devices, and scan the QR code.
+Open `https://<your-LAN-IP>:3000/start` on the laptop, accept the certificate warning on both devices, and scan the QR code. (Installing the app needs the deployed HTTPS site; a self-signed certificate can't install.)
 
 </details>
 
@@ -151,21 +228,23 @@ Open `https://<your-LAN-IP>:3000/start` on the laptop, accept the certificate wa
 <summary><b>Project layout</b></summary>
 
 ```
-app/            pages (/, /start, /bench, /cam, /try, /report) and API routes
+app/            pages (/, /start, /bench, /cam, /try, /report), API routes, manifest
 lib/ai/         Token Factory client, model config, prompts
 lib/pipeline/   guide · observe · confirm · gate · verify · frame · report
-lib/capture/    camera, frame capture + change detector, voice, placeholder clip
+lib/capture/    camera, frame capture + change detector, voice, voice commands,
+                camera quality + flashlight, QR reading, placeholder clip
 lib/mock/       scripted model outputs and hand-checked guides
-components/     dashboard pieces: checklist, evidence, events, agent trace
+components/     HUD primitives, dashboard panels, site header/footer, QR scanner
+public/         app icons, service worker, offline page, sample replay
 ```
 
 </details>
 
 `pnpm test` runs the unit tests · `pnpm build` makes a production build.
 
-## Safety and limitations
+## 🛡 Safety and limitations
 
-- **Guidance only.** You are responsible for your repair. Not for mains electrical work.
+- **Guidance only.** You are responsible for your work. No mains electrical or gas work; those tasks are refused.
 - In the demo, the battery is only disconnected, never pried or punctured.
 - A camera can't verify fine soldering or micro-components, so steps it can't check are skipped unless they're safety-critical.
 - The public demo is rate-limited (per IP, a daily budget, a 5-minute cap per live session) so it stays up for judging.
@@ -173,5 +252,6 @@ components/     dashboard pieces: checklist, evidence, events, agent trace
 ---
 
 <p align="center">
+  <img src="public/icon-192.png" alt="" width="40"><br>
   <sub>Built for the <b>Nebius × NVIDIA Global AI Hackathon</b> · Physical AI track · <a href="LICENSE">MIT License</a></sub>
 </p>

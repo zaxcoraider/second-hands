@@ -5,7 +5,7 @@ import type { Focus } from "@/lib/schemas";
 import { STATE, type AiState } from "@/lib/ui-state";
 import { cn } from "@/lib/utils";
 
-type Rect = { left: number; top: number; width: number; height: number };
+type Rect = { left: number; top: number; width: number; height: number; tagBelow: boolean };
 
 /**
  * Draws the model's focus box over a video/img shown with `object-fit: cover`, accounting for the crop.
@@ -41,7 +41,9 @@ export function FocusBox({
       const dh = mh * scale;
       const ox = (cw - dw) / 2;
       const oy = (ch - dh) / 2;
-      setRect({ left: ox + focus.x * dw, top: oy + focus.y * dh, width: focus.w * dw, height: focus.h * dh });
+      const top = oy + focus.y * dh;
+      // Near the top, the HUD title sits there: put the label under the box instead.
+      setRect({ left: ox + focus.x * dw, top, width: focus.w * dw, height: focus.h * dh, tagBelow: top < ch * 0.3 });
     };
     compute();
     const ro = new ResizeObserver(compute);
@@ -64,7 +66,7 @@ export function FocusBox({
         <div
           key={state}
           className={cn("hud-lock absolute transition-[left,top,width,height] duration-500 ease-out", tone)}
-          style={rect}
+          style={{ left: rect.left, top: rect.top, width: rect.width, height: rect.height }}
         >
           <span className="absolute inset-0 border border-current opacity-40" />
           {/* corner ticks */}
@@ -74,7 +76,12 @@ export function FocusBox({
           <span className="absolute -right-px -bottom-px size-3 border-r-2 border-b-2 border-current" />
           <span className="absolute top-1/2 left-1/2 size-1.5 -translate-1/2 rounded-full bg-current" />
           {label && (
-            <span className="absolute -top-6 left-0 rounded-[2px] bg-current px-1.5 py-0.5 font-mono text-[10px] font-semibold tracking-wider whitespace-nowrap uppercase">
+            <span
+              className={cn(
+                "absolute left-0 rounded-[2px] bg-current px-1.5 py-0.5 font-mono text-[10px] font-semibold tracking-wider whitespace-nowrap uppercase",
+                rect.tagBelow ? "-bottom-6" : "-top-6",
+              )}
+            >
               <span className="text-black">{label}</span>
             </span>
           )}
