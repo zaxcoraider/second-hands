@@ -10,6 +10,7 @@ import { useFrameLoop } from "@/hooks/use-frame-loop";
 import { CAMERA_ERROR_TEXT, cameraErrorCode, keepAwake, openCamera } from "@/lib/capture/camera";
 import { Voice } from "@/lib/capture/voice";
 import type { FrameResultBody } from "@/lib/client-types";
+import { DEFAULT_SETUP } from "@/lib/categories";
 import type { Focus, SessionEvent, SessionState } from "@/lib/schemas";
 import { HOLD_MS, STATE, stateOfEvent, type AiState } from "@/lib/ui-state";
 import { cn } from "@/lib/utils";
@@ -281,7 +282,7 @@ export function CamClient({ id }: { id: string }) {
             </h1>
             <MountDiagram />
             <p className="mt-3 text-base text-muted-foreground">
-              Mount the phone 15–20 cm above your work, camera facing down, in good light. Turn the volume up.
+              {guide?.setup ?? DEFAULT_SETUP} Turn the volume up.
             </p>
           </div>
 
@@ -342,7 +343,7 @@ function MountDiagram() {
       <rect x="40" y="106" width="240" height="4" fill="currentColor" opacity="0.5" />
       <path d="M250 15 V100" stroke="currentColor" strokeOpacity="0.7" />
       <path d="M245 15 H255 M245 100 H255" stroke="currentColor" strokeOpacity="0.7" />
-      <text x="262" y="62" fill="currentColor" fontSize="12" fontFamily="ui-monospace, monospace">15–20 cm</text>
+      <text x="262" y="62" fill="currentColor" fontSize="12" fontFamily="ui-monospace, monospace">height</text>
     </svg>
   );
 }

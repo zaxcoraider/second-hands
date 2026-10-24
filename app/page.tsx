@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Eye, OctagonX, Play, Search, ShieldCheck, Volume2 } from "lucide-react";
+import { ArrowRight, Bike, ChefHat, Cpu, Eye, Hammer, OctagonX, Play, Scissors, Search, ShieldCheck, Volume2, Wrench } from "lucide-react";
 import { Corners } from "@/components/hud";
 import { LogoMark } from "@/components/logo";
 import { buttonVariants } from "@/components/ui/button";
@@ -9,13 +9,13 @@ const HOW = [
   {
     icon: Search,
     title: "Finds the real guide",
-    body: "Name the device and the job. Tavily searches the web at runtime and Nemotron turns the guide into steps a camera can verify.",
+    body: "Name the job: a repair, a recipe, a build. Tavily searches the web at runtime and Nemotron turns the guide into steps a camera can verify.",
     tag: "Tavily · Super 120B",
   },
   {
     icon: Eye,
     title: "Watches your hands",
-    body: "A phone above the bench sends a frame whenever the scene changes. The vision model checks it against the step you're on.",
+    body: "A phone above your work sends a frame whenever the scene changes. The vision model checks it against the step you're on.",
     tag: "Super VL",
   },
   {
@@ -24,6 +24,15 @@ const HOW = [
     body: "A mistake must show in 2 of 3 frames. A fast model decides whether to interrupt; the largest model verifies before any “Stop”.",
     tag: "Nano 30B · Ultra 550B",
   },
+];
+
+const WORKS_FOR = [
+  { icon: Cpu, label: "Phone & electronics repair" },
+  { icon: ChefHat, label: "Cooking & knife skills" },
+  { icon: Hammer, label: "Furniture & woodwork" },
+  { icon: Wrench, label: "Home fixes" },
+  { icon: Bike, label: "Bikes" },
+  { icon: Scissors, label: "Crafts & soldering" },
 ];
 
 const STACK = [
@@ -47,7 +56,7 @@ export default function Home() {
               Sample run
             </Link>
             <Link href="/start" className={cn(buttonVariants({ variant: "outline" }), "h-9 border-hud/40 text-hud hover:bg-hud/10")}>
-              Start a repair
+              Start a task
             </Link>
           </nav>
         </header>
@@ -59,11 +68,11 @@ export default function Home() {
             </p>
             <h1 className="font-display text-5xl leading-[0.98] font-semibold tracking-tight sm:text-7xl">
               An AI that watches your hands and stops you before you{" "}
-              <span className="text-glow text-stop">break</span> something.
+              <span className="text-glow text-stop">ruin</span> it.
             </h1>
             <p className="max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Mount your phone above the bench. Second Hands follows the real repair guide step by step and speaks up the
-              moment you reach for the wrong connector.
+              Fixing a phone, dicing an onion, building a bookshelf: point your phone at the work. Second Hands finds the
+              real guide, follows you step by step, and speaks up the moment your hands go wrong.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
@@ -77,7 +86,7 @@ export default function Home() {
                 href="/start"
                 className={cn(buttonVariants({ variant: "outline", size: "lg" }), "h-12 px-6 font-display text-base")}
               >
-                Start a repair
+                Start your own task
                 <ArrowRight data-icon="inline-end" />
               </Link>
             </div>
@@ -87,6 +96,21 @@ export default function Home() {
           </div>
 
           <HeroPhone />
+        </section>
+
+        <section className="py-4">
+          <p className="hud-label mb-3">
+            <span className="text-hud">00 </span>
+            {"// "}Works for any hands-on task with a guide
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {WORKS_FOR.map((w) => (
+              <span key={w.label} className="flex items-center gap-2 rounded-[4px] border bg-black/30 px-3 py-2 text-sm text-foreground/85">
+                <w.icon className="size-4 text-hud" strokeWidth={1.75} />
+                {w.label}
+              </span>
+            ))}
+          </div>
         </section>
 
         <section className="grid gap-4 py-8 md:grid-cols-3">
@@ -120,7 +144,7 @@ export default function Home() {
 
         <footer className="mt-auto flex flex-col gap-2 border-t py-6 font-mono text-[11px] tracking-[0.12em] text-muted-foreground uppercase sm:flex-row sm:justify-between">
           <span>Built on Nebius Token Factory with NVIDIA Nemotron</span>
-          <span>Guidance only · you are responsible for your repair · not for mains electrical work</span>
+          <span>Guidance only · you are responsible for your work · no mains electrical or gas work</span>
         </footer>
       </div>
     </div>

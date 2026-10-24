@@ -1,5 +1,5 @@
 import type { Focus, GateDecision, Guide, Observation, SessionEvent, Step, VerifyResult } from "@/lib/schemas";
-import { REDMI_NOTE_8_BATTERY, findCuratedGuide } from "@/lib/mock/guides";
+import { findCuratedGuide } from "@/lib/mock/guides";
 
 /**
  * Scripted model outputs for mock mode. Same shapes as the real models, so the whole
@@ -14,9 +14,9 @@ import { REDMI_NOTE_8_BATTERY, findCuratedGuide } from "@/lib/mock/guides";
 export function scriptedRole(guide: Guide, step: Step): "stop" | "ask" | null {
   const stopStep = guide.steps.find((s) => s.safety && s.commonMistakes.length > 0);
   if (stopStep?.id === step.id) return "stop";
-  const askStep = guide.steps.find(
-    (s) => s.id !== stopStep?.id && s.severity === "high" && s.commonMistakes.length > 0 && !s.safety,
-  );
+  // Prefer a non-safety high-severity step for the "ask"; otherwise any other high-severity one.
+  const candidates = guide.steps.filter((s) => s.id !== stopStep?.id && s.severity === "high" && s.commonMistakes.length > 0);
+  const askStep = candidates.find((s) => !s.safety) ?? candidates[0];
   if (askStep?.id === step.id) return "ask";
   return null;
 }
@@ -79,6 +79,11 @@ const WARN_LINES: Record<string, string> = {
   prying_battery: "Stop. Never pry the battery. Use the pull tabs.",
   long_screw_wrong_hole: "Stop. That long screw goes in the marked corner.",
   cover_pulled_with_flex: "Careful. The fingerprint cable is still attached.",
+  flat_fingers: "Stop. Curl your fingertips into a claw.",
+  cutting_toward_hand: "Stop. Cut away from your other hand.",
+  no_anti_tip: "Stop. Fit the anti-tip strap before loading it.",
+  panel_backwards: "Stop. That panel is back to front.",
+  hands_in_path: "Stop. Move your hand out of the tool's path.",
   missing_resistor: "Stop. Add the resistor before powering the LED.",
   led_reversed: "Flip the LED. Long leg toward plus.",
 };
@@ -88,6 +93,9 @@ const ASK_LINES: Record<string, string> = {
   led_reversed: "Is the long leg facing plus? Hold it closer.",
   missing_resistor: "Is there a resistor in that row? Hold it closer.",
   screws_mixed: "Are those screws kept in order?",
+  flat_fingers: "Are your fingertips tucked in? Curl them under.",
+  panel_backwards: "Is the finished edge facing the front?",
+  cam_wrong_way: "Is that cam lock arrow facing the bolt?",
 };
 
 export function mockVerify(): VerifyResult {
@@ -99,10 +107,38 @@ export function mockVerify(): VerifyResult {
 }
 
 export function mockGuide(task: string): Guide {
-  const curated = findCuratedGuide(task);
-  if (curated) return curated;
-  // Unknown task in mock mode: reuse the phone guide's shape with the user's title.
-  return { ...REDMI_NOTE_8_BATTERY, title: task, device: undefined };
+  return findCuratedGuide(task) ?? genericGuide(task);
+}
+
+/** Mock mode for a task we have no hand-checked guide for: a plain, honest 5-step outline. */
+function genericGuide(task: string): Guide {
+  const step = (id: string, title: string, instruction: string, visualCheck: string, extra: Partial<Step> = {}): Step => ({
+    id,
+    title,
+    instruction,
+    visualCheck,
+    commonMistakes: [],
+    severity: "low",
+    safety: false,
+    ...extra,
+  });
+  return {
+    title: task,
+    sources: [],
+    steps: [
+      step("s1", "Clear and light the work area", "Clear the surface and make sure your hands and the work are well lit.", "An uncluttered surface with the work in the middle of the frame."),
+      step("s2", "Lay out tools and parts", "Put every tool and part you need within reach, in the order you'll use them.", "Tools and parts laid out in a row beside the work."),
+      step("s3", "Do the main step carefully", "Work slowly and keep your free hand clear of any blade, bit or hot surface.", "The main change is done and both hands are clear of the tool.", {
+        severity: "high",
+        safety: true,
+        commonMistakes: [
+          { type: "hands_in_path", description: "A hand in the path of a tool is how most injuries happen.", looksLike: "Fingers directly in front of a blade, bit or hot surface." },
+        ],
+      }),
+      step("s4", "Check the result", "Compare the result with the guide before moving on.", "The finished work matches the guide's picture.", { severity: "medium" }),
+      step("s5", "Clean up", "Put tools away and clear the surface.", "An empty, clean surface."),
+    ],
+  };
 }
 
 export function mockReport(events: SessionEvent[]): string {

@@ -202,7 +202,7 @@ function Shell({ children, wide }: { children: React.ReactNode; wide?: boolean }
             <span className="font-mono text-xs tracking-[0.22em] uppercase">Second Hands</span>
           </Link>
           <Link href="/start" className="font-mono text-xs tracking-[0.14em] text-muted-foreground uppercase hover:text-hud">
-            Start a repair →
+            Start a task →
           </Link>
         </header>
         <div className={cn("flex flex-col gap-5 pb-16", wide ? "pt-6" : "flex-1 justify-center gap-3 pb-32")}>{children}</div>

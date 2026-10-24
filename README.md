@@ -26,7 +26,7 @@
 
 ---
 
-Mount any phone 15–20 cm above your bench. **Second Hands** finds the real repair guide on the web, turns it into steps a camera can check, watches every step, and speaks up only when it matters:
+Point any phone at your work: a phone repair, a cutting board, a flat-pack bookshelf. **Second Hands** finds the real guide on the web, turns it into steps a camera can check, watches every step, and speaks up only when it matters:
 
 <p align="center"><b><i>"Stop. Disconnect the battery connector first."</i></b></p>
 
@@ -49,13 +49,19 @@ One wrong move in a repair costs real money, and nobody is watching:
 
 Manuals and videos can't see what *you* are doing. An expert next to you can, but experts are expensive, and a repair shop owner can't watch every apprentice all day. **Second Hands is that expert, sitting above the bench.**
 
-**Built for** phone repair apprentices and beginners first (shaped with input from a working phone repair shop), then DIY repairers and electronics students. It works for any task with a manual.
+**Built for** phone repair apprentices and beginners first (shaped with input from a working phone repair shop), where one slip costs a customer's phone. The same loop works for **any hands-on task with a guide**:
+
+| Electronics repair | Cooking | Furniture & woodwork | Home fixes | Bikes | Crafts |
+|---|---|---|---|---|---|
+| battery first, no metal on connectors | claw grip, cut away from your hand | panels the right way round, anti-tip strap | tap cartridges, drywall patches | flats, brakes, chains | soldering, sewing |
+
+Tasks where a missed warning could seriously hurt someone (mains electrical, gas, vehicle brakes, firearms) are refused.
 
 ## How it works
 
 | | Step | What happens |
 |---|---|---|
-| 1 | **Start** · `/start` | Type the device and job (*"Redmi Note 8 battery replacement"*). Tavily finds real guides; Nemotron builds the checklist with what "done" looks like *from above* and the costly mistakes to watch for. Edit it, then start. |
+| 1 | **Start** · `/start` | Pick a category and type the job (*"Redmi Note 8 battery replacement"*, *"Dice an onion safely"*). Tavily finds real guides; Nemotron builds the checklist with what "done" looks like *from above*, the costly mistakes to watch for, and where to put the camera. Edit it, then start. |
 | 2 | **Pair** · `/bench` | Scan the QR code with any phone. It opens `/cam` with the rear camera. No app to install. |
 | 3 | **Work** | The phone sends a frame whenever the scene changes. The dashboard shows the live view, checklist, events and an agent trace of every model call. |
 | 4 | **Catch** | The same mistake in 2 of the last 3 frames → Nano decides if it's worth interrupting → on high-severity steps Ultra verifies → the phone chimes: **"Stop."** |

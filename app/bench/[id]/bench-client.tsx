@@ -8,6 +8,7 @@ import { BenchLayout } from "@/components/bench/bench-layout";
 import { QrPair } from "@/components/bench/qr-pair";
 import { Button } from "@/components/ui/button";
 import { useSessionState } from "@/hooks/use-session-state";
+import { DEFAULT_SETUP } from "@/lib/categories";
 
 export function BenchClient({ id }: { id: string }) {
   const router = useRouter();
@@ -27,7 +28,7 @@ export function BenchClient({ id }: { id: string }) {
         <h1 className="text-2xl font-semibold">Session not found</h1>
         <p className="text-muted-foreground">It may have expired. Start a new repair or try the sample run.</p>
         <div className="flex gap-4 text-sm">
-          <Link href="/start" className="text-primary hover:underline">Start a repair</Link>
+          <Link href="/start" className="text-primary hover:underline">Start a task</Link>
           <Link href="/try" className="text-primary hover:underline">Sample run</Link>
         </div>
       </main>
@@ -70,7 +71,7 @@ export function BenchClient({ id }: { id: string }) {
               </p>
               <QrPair id={id} connected={connected} />
               <p className="max-w-sm text-center text-sm text-muted-foreground">
-                Mount the phone 15–20 cm above your work, camera facing down, and tap Start on it.
+                {data.session.guide.setup ?? DEFAULT_SETUP} Then tap Start on the phone.
               </p>
             </div>
           ) : undefined

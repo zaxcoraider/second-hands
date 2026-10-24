@@ -3,15 +3,23 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArrowRight, Check, ExternalLink, Loader2, Lock, Trash2 } from "lucide-react";
+import { ArrowRight, Bike, Check, ChefHat, Cpu, ExternalLink, Hammer, Loader2, Lock, Scissors, Trash2, Wrench, type LucideIcon } from "lucide-react";
 import { HudPanel } from "@/components/hud";
 import { LogoMark } from "@/components/logo";
 import { Button } from "@/components/ui/button";
+import { CATEGORIES, type CategoryId } from "@/lib/categories";
 import type { Guide, TraceEntry } from "@/lib/schemas";
 import { fmtMs } from "@/lib/ui-state";
 import { cn } from "@/lib/utils";
 
-const EXAMPLES = ["Redmi Note 8 battery replacement", "LED circuit on a breadboard"];
+const ICONS: Record<CategoryId, LucideIcon> = {
+  electronics: Cpu,
+  cooking: ChefHat,
+  furniture: Hammer,
+  home: Wrench,
+  bike: Bike,
+  crafts: Scissors,
+};
 
 const LOADING = [
   { tag: "tavily", line: "Searching the web for repair guides" },
@@ -24,6 +32,8 @@ type GuideResponse = { guide: Guide; traces: TraceEntry[]; cached: boolean; mock
 export function StartClient() {
   const router = useRouter();
   const [task, setTask] = useState("");
+  const [categoryId, setCategoryId] = useState<CategoryId>("electronics");
+  const category = CATEGORIES.find((c) => c.id === categoryId)!;
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -107,7 +117,7 @@ export function StartClient() {
             <span className="text-hud">01 </span>{"// "}Define the job
           </p>
           <label htmlFor="task" className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-            What are you fixing?
+            What are you working on?
           </label>
           <form
             onSubmit={(e) => {
@@ -122,7 +132,7 @@ export function StartClient() {
                 id="task"
                 value={task}
                 onChange={(e) => setTask(e.target.value)}
-                placeholder="device + job, e.g. Redmi Note 8 battery replacement"
+                placeholder={`e.g. ${category.examples[0]}`}
                 maxLength={160}
                 autoFocus
                 className="h-13 w-full rounded-md border bg-black/40 pr-4 pl-9 font-mono text-[15px] outline-none placeholder:text-muted-foreground/60 focus:border-hud focus:shadow-[0_0_0_3px_color-mix(in_oklab,var(--hud)_18%,transparent)]"
@@ -133,9 +143,30 @@ export function StartClient() {
               Find the guide
             </Button>
           </form>
+          <div className="flex flex-wrap gap-2" role="tablist" aria-label="Category">
+            {CATEGORIES.map((c) => {
+              const Icon = ICONS[c.id];
+              const on = c.id === categoryId;
+              return (
+                <button
+                  key={c.id}
+                  role="tab"
+                  aria-selected={on}
+                  onClick={() => setCategoryId(c.id)}
+                  className={cn(
+                    "flex items-center gap-2 rounded-[4px] border px-3 py-2 text-sm transition-colors",
+                    on ? "glow-hud border-hud bg-hud/10 text-hud" : "bg-black/30 text-muted-foreground hover:border-hud/50 hover:text-foreground",
+                  )}
+                >
+                  <Icon className="size-4" strokeWidth={1.75} />
+                  {c.label}
+                </button>
+              );
+            })}
+          </div>
           <div className="flex flex-wrap items-center gap-2">
             <span className="hud-label mr-1">Try</span>
-            {EXAMPLES.map((ex) => (
+            {category.examples.map((ex) => (
               <button
                 key={ex}
                 onClick={() => build(ex)}

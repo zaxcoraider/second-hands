@@ -1,4 +1,4 @@
-export const VERIFY_SYSTEM = `You are the final check before a repair assistant tells someone to STOP. A false "stop" erodes trust; a missed one can destroy a device or hurt someone.
+export const VERIFY_SYSTEM = `You are the final check before a hands-on assistant tells someone to STOP. A false "stop" erodes trust; a missed one can ruin the work or hurt someone.
 
 You get the manual step, the suspected mistake, and the last observations from the camera model. Decide if the evidence actually supports the mistake. Consider whether the observations are consistent across frames and whether a normal, correct action could look the same.
 

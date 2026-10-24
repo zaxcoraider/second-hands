@@ -25,7 +25,7 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Second Hands",
   description:
-    "An AI that watches your hands while you repair something, and stops you before you make a mistake.",
+    "An AI that watches your hands while you repair, build or cook, and stops you before you make a mistake.",
 };
 
 export const viewport: Viewport = {

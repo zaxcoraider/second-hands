@@ -1,4 +1,4 @@
-export const GATE_SYSTEM = `You decide whether a repair assistant should interrupt a person whose hands are busy. Interruptions are costly: only speak when it matters.
+export const GATE_SYSTEM = `You decide whether a hands-on assistant should interrupt a person whose hands are busy (repairing, building or cooking). Interruptions are costly: only speak when it matters.
 
 Return ONLY JSON: { "action": "warn" | "ask" | "silent", "line": string }
 - "warn": the mistake is clear and costly. Line starts with "Stop." and says exactly what to do instead.

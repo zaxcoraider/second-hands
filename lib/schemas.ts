@@ -23,6 +23,9 @@ export const Source = z.object({ title: z.string(), url: z.string() });
 export const Guide = z.object({
   title: z.string(),
   device: z.string().optional(),
+  category: z.string().optional(),
+  /** Where to put the camera for this task, shown on the phone before starting. */
+  setup: z.string().optional(),
   sources: z.array(Source).default([]),
   steps: z.array(Step).min(1),
 });

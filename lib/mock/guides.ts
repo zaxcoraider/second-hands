@@ -8,6 +8,8 @@ import type { Guide } from "@/lib/schemas";
 export const REDMI_NOTE_8_BATTERY: Guide = {
   title: "Redmi Note 8 battery replacement",
   device: "Xiaomi Redmi Note 8",
+  category: "electronics",
+  setup: "Mount the phone 15–20 cm above the bench, camera facing down, in bright even light.",
   sources: [
     { title: "iFixit: Xiaomi Redmi Note 8 repair", url: "https://www.ifixit.com/Device/Xiaomi_Redmi_Note_8" },
   ],
@@ -135,6 +137,8 @@ export const REDMI_NOTE_8_BATTERY: Guide = {
 export const LED_BREADBOARD: Guide = {
   title: "LED circuit on a breadboard",
   device: "Breadboard starter kit",
+  category: "electronics",
+  setup: "Mount the phone 20–30 cm above the breadboard so all rails are in frame.",
   sources: [
     { title: "SparkFun: How to use a breadboard", url: "https://learn.sparkfun.com/tutorials/how-to-use-a-breadboard" },
   ],
@@ -205,9 +209,187 @@ export const LED_BREADBOARD: Guide = {
   ],
 };
 
+export const DICE_ONION: Guide = {
+  title: "Dice an onion safely",
+  device: "Onion",
+  category: "cooking",
+  setup: "Mount the phone 40–60 cm above the cutting board, camera facing down, so both hands and the knife are in frame.",
+  sources: [{ title: "Serious Eats: How to dice an onion", url: "https://www.seriouseats.com/knife-skills-how-to-dice-an-onion" }],
+  steps: [
+    {
+      id: "s1",
+      title: "Steady the cutting board",
+      instruction: "Put a damp towel under the board so it can't slide.",
+      visualCheck: "The board sits flat with a towel edge visible underneath.",
+      commonMistakes: [],
+      severity: "low",
+      safety: false,
+    },
+    {
+      id: "s2",
+      title: "Halve the onion through the root",
+      instruction: "Cut the onion in half from top to root, then trim the top. Keep the root on to hold the layers together.",
+      visualCheck: "Two onion halves lie flat side down, root ends still attached.",
+      commonMistakes: [
+        {
+          type: "cutting_toward_hand",
+          description: "Slicing toward the hand that's holding the onion is how most kitchen cuts happen.",
+          looksLike: "The knife edge moving in the direction of the other hand's fingers.",
+        },
+      ],
+      severity: "medium",
+      safety: false,
+    },
+    {
+      id: "s3",
+      title: "Peel the halves",
+      instruction: "Peel off the papery skin and the first tough layer.",
+      visualCheck: "Two clean, peeled halves with no brown skin left.",
+      commonMistakes: [],
+      severity: "low",
+      safety: false,
+    },
+    {
+      id: "s4",
+      title: "Make vertical cuts with a claw grip",
+      instruction: "Hold the onion with fingertips curled under, knuckles against the blade. Cut thin slices toward the root without cutting through it.",
+      visualCheck: "Evenly spaced slices fanned from the root, fingertips tucked behind the knuckles.",
+      commonMistakes: [
+        {
+          type: "flat_fingers",
+          description: "Flat, extended fingertips in front of the blade get cut.",
+          looksLike: "Fingertips flat on the onion and ahead of the knuckles, near the knife edge.",
+        },
+      ],
+      severity: "high",
+      safety: true,
+    },
+    {
+      id: "s5",
+      title: "Cross-cut to dice",
+      instruction: "Turn the onion and slice across the cuts, still using a claw grip, walking your fingers back as you go.",
+      visualCheck: "Small even cubes piled on the board, the root end left as a stub.",
+      commonMistakes: [
+        {
+          type: "flat_fingers",
+          description: "Flat, extended fingertips in front of the blade get cut.",
+          looksLike: "Fingertips flat on the onion and ahead of the knuckles, near the knife edge.",
+        },
+      ],
+      severity: "high",
+      safety: true,
+    },
+    {
+      id: "s6",
+      title: "Move the dice with the knife spine",
+      instruction: "Turn the knife over and scrape the onion into a bowl with the back of the blade.",
+      visualCheck: "Diced onion in a bowl; the board is mostly clear.",
+      commonMistakes: [
+        {
+          type: "edge_scraping",
+          description: "Scraping with the sharp edge dulls the knife and can slip.",
+          looksLike: "The blade edge, not the spine, dragging across the board.",
+        },
+      ],
+      severity: "medium",
+      safety: false,
+    },
+  ],
+};
+
+export const FLATPACK_BOOKSHELF: Guide = {
+  title: "Assemble a flat-pack bookshelf",
+  device: "Flat-pack bookshelf",
+  category: "furniture",
+  setup: "Mount the phone 60–80 cm above the floor area so a whole panel is in frame.",
+  sources: [{ title: "IKEA: Assembly instructions", url: "https://www.ikea.com/us/en/customer-service/product-support/assembly-instructions/" }],
+  steps: [
+    {
+      id: "s1",
+      title: "Lay out and count the parts",
+      instruction: "Lay the panels on a rug or the box, and sort the screws, dowels and cam locks by type.",
+      visualCheck: "Panels on a soft surface and hardware sorted into small groups.",
+      commonMistakes: [],
+      severity: "low",
+      safety: false,
+    },
+    {
+      id: "s2",
+      title: "Insert the dowels and cam bolts",
+      instruction: "Push the wooden dowels into the side panels and screw the cam bolts in by hand.",
+      visualCheck: "Every pre-drilled hole on the side panel edges has a dowel or a cam bolt.",
+      commonMistakes: [
+        {
+          type: "dowel_missing",
+          description: "A missing dowel makes the joint weak and the shelf wobbly.",
+          looksLike: "An empty pre-drilled hole on a panel edge next to filled ones.",
+        },
+      ],
+      severity: "medium",
+      safety: false,
+    },
+    {
+      id: "s3",
+      title: "Join the sides to the base",
+      instruction: "Fit the side panels onto the base with the finished edges facing the front.",
+      visualCheck: "Sides standing on the base, smooth finished edges all on the same side.",
+      commonMistakes: [
+        {
+          type: "panel_backwards",
+          description: "A panel fitted back-to-front puts raw edges and holes on show and the back won't fit.",
+          looksLike: "One panel showing unfinished chipboard or extra holes on the front edge.",
+        },
+      ],
+      severity: "high",
+      safety: false,
+    },
+    {
+      id: "s4",
+      title: "Lock the cam fittings",
+      instruction: "Drop the cam locks in with the arrow pointing at the bolt hole, then turn clockwise until snug.",
+      visualCheck: "Cam locks seated flush with their arrows turned toward the joint.",
+      commonMistakes: [
+        {
+          type: "cam_wrong_way",
+          description: "A cam lock facing the wrong way doesn't grip the bolt and the joint pulls apart.",
+          looksLike: "A cam lock arrow pointing away from the panel edge.",
+        },
+      ],
+      severity: "medium",
+      safety: false,
+    },
+    {
+      id: "s5",
+      title: "Nail on the back panel",
+      instruction: "Lay the frame face down, square it, and nail the back panel along the edges.",
+      visualCheck: "Back panel flush with all four edges and nails evenly spaced.",
+      commonMistakes: [],
+      severity: "medium",
+      safety: false,
+    },
+    {
+      id: "s6",
+      title: "Fit the anti-tip strap",
+      instruction: "Screw the anti-tip strap to the top panel and anchor it to the wall before loading the shelf.",
+      visualCheck: "A strap runs from the top of the shelf to a wall fixing.",
+      commonMistakes: [
+        {
+          type: "no_anti_tip",
+          description: "An unanchored bookshelf can tip over onto someone, especially a child.",
+          looksLike: "The shelf standing upright with no strap at the top and items going onto it.",
+        },
+      ],
+      severity: "high",
+      safety: true,
+    },
+  ],
+};
+
 export const CURATED_GUIDES: { match: RegExp; guide: Guide }[] = [
   { match: /redmi\s*note\s*8/i, guide: REDMI_NOTE_8_BATTERY },
-  { match: /led|breadboard/i, guide: LED_BREADBOARD },
+  { match: /\bled\b|breadboard/i, guide: LED_BREADBOARD },
+  { match: /onion|\bdice\b|\bchop/i, guide: DICE_ONION },
+  { match: /bookshelf|bookcase|flat.?pack|ikea/i, guide: FLATPACK_BOOKSHELF },
 ];
 
 export function findCuratedGuide(task: string): Guide | undefined {
