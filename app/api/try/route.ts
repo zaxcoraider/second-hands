@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   if (!isMockAI() && (await overBudget())) {
     return NextResponse.json({ replay: true, reason: "Today's live demo budget is used up, so this is a recorded run." });
   }
-  if (!(await rateLimit("session", clientIp(req)))) {
+  if (!(await rateLimit("try", clientIp(req)))) {
     return NextResponse.json({ replay: true, reason: "You've used today's live runs, so this is a recorded run." });
   }
   const session = await createSession({ task: REDMI_NOTE_8_BATTERY.title, guide: REDMI_NOTE_8_BATTERY, mode: "try" });

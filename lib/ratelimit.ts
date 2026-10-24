@@ -1,15 +1,17 @@
 import "server-only";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
-import { env, hasRedis } from "@/lib/env";
+import { env, hasRedis, isMockAI } from "@/lib/env";
 import { store } from "@/lib/store";
 
 /** Per-IP limits from architecture.md, plus the global daily budget. */
 
-type Kind = "session" | "frame" | "guide";
+type Kind = "session" | "try" | "frame" | "guide";
 
 const RULES: Record<Kind, { tokens: number; window: `${number} ${"s" | "m" | "h" | "d"}`; ms: number }> = {
   session: { tokens: 10, window: "1 d", ms: 86_400_000 },
+  // Sample runs have their own allowance, so judges re-running /try never block a real session.
+  try: { tokens: 10, window: "1 d", ms: 86_400_000 },
   guide: { tokens: 10, window: "1 d", ms: 86_400_000 },
   frame: { tokens: 40, window: "1 m", ms: 60_000 },
 };
@@ -33,8 +35,8 @@ const g = globalThis as unknown as { __shRl?: Map<string, number[]> };
 const mem: Map<string, number[]> = (g.__shRl ??= new Map());
 
 export async function rateLimit(kind: Kind, ip: string): Promise<boolean> {
-  // Frames are cheap to allow locally; skip limits entirely in dev.
-  if (process.env.NODE_ENV === "development") return true;
+  // Limits protect the Token Factory budget: skip them in dev and in mock mode, where calls cost nothing.
+  if (process.env.NODE_ENV === "development" || isMockAI()) return true;
   if (hasRedis()) return (await upstash()[kind].limit(ip)).success;
   const key = `${kind}:${ip}`;
   const now = Date.now();
