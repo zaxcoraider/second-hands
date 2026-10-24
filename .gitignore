@@ -5,6 +5,7 @@ phases.md
 design.md
 memory.md
 hack-details.md
+FEEDBACK.md
 
 # --- Secrets ---
 .env
