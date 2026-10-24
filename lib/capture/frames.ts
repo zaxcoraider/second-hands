@@ -6,7 +6,8 @@ export const CAPTURE = {
   longEdge: 768,
   quality: 0.7,
   diffSize: 32,
-  diffThreshold: 9, // mean absolute grayscale difference (0-255) that counts as "the scene changed"
+  pixelDelta: 24, // a 32×32 pixel "changed" if its grayscale moved by more than this (0-255); above sensor noise
+  changedShare: 0.03, // send when at least this share of pixels changed (a hand moving over a small area)
   heartbeatMs: 6_000, // send a frame at least this often, even if nothing changed
 };
 
@@ -56,10 +57,10 @@ export class ChangeDetector {
     const cur = this.sample(video);
     if (!cur) return false;
     if (!this.last) return true;
-    let sum = 0;
-    for (let i = 0; i < cur.length; i++) sum += Math.abs(cur[i] - this.last[i]);
-    this.lastDiff = sum / cur.length;
-    return this.lastDiff >= CAPTURE.diffThreshold || now - this.lastSentAt >= CAPTURE.heartbeatMs;
+    let changed = 0;
+    for (let i = 0; i < cur.length; i++) if (Math.abs(cur[i] - this.last[i]) > CAPTURE.pixelDelta) changed++;
+    this.lastDiff = changed / cur.length;
+    return this.lastDiff >= CAPTURE.changedShare || now - this.lastSentAt >= CAPTURE.heartbeatMs;
   }
 
   markSent(video: FrameSource, now = Date.now()) {

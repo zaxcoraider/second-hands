@@ -13,6 +13,8 @@ export function EvidencePanel({ event }: { event: SessionEvent | null }) {
     );
   }
   const meta = EVENT_META[event.kind];
+  // Live sessions store a frame id; replays carry the captured frame itself.
+  const src = event.frameThumb.startsWith("data:") ? event.frameThumb : `/api/thumb/${event.frameThumb}`;
   return (
     <div className="overflow-hidden rounded-xl border bg-card">
       <div className="flex items-center justify-between border-b px-4 py-2.5">
@@ -31,7 +33,7 @@ export function EvidencePanel({ event }: { event: SessionEvent | null }) {
         <figure className="bg-card p-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={`/api/thumb/${event.frameThumb}`}
+            src={src}
             alt="Frame the warning was based on"
             className="aspect-[4/3] w-full rounded-md bg-black object-cover"
           />
