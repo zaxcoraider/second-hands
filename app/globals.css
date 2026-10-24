@@ -199,3 +199,8 @@
   .hud-scan, .hud-pulse, .hud-blink, .hud-glitch, .hud-flash, .hud-lock { animation: none; }
   .hud-scan { display: none; }
 }
+
+@keyframes hero-fill {
+  from { width: 0%; }
+  to { width: 100%; }
+}
