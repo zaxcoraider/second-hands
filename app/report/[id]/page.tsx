@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import { LogoMark } from "@/components/logo";
 import Link from "next/link";
-import { ShieldCheck, Wrench } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { shortName } from "@/lib/ai/models";
 import type { SessionEvent, TraceEntry } from "@/lib/schemas";
 import { store } from "@/lib/store";
@@ -193,7 +194,7 @@ function Shell({ children, wide }: { children: React.ReactNode; wide?: boolean }
     <main className={cn("mx-auto flex min-h-dvh flex-col px-4 sm:px-6", wide ? "max-w-4xl" : "max-w-md")}>
       <header className="flex items-center justify-between py-5">
         <Link href="/" className="flex items-center gap-2 font-semibold">
-          <Wrench className="size-4" strokeWidth={1.75} />
+          <LogoMark />
           Second Hands
         </Link>
         <Link href="/start" className="text-sm text-muted-foreground hover:text-foreground">

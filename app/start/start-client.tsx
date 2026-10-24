@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { LogoMark } from "@/components/logo";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArrowRight, Check, ExternalLink, Loader2, Lock, Trash2, Wrench } from "lucide-react";
+import { ArrowRight, Check, ExternalLink, Loader2, Lock, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Guide, TraceEntry } from "@/lib/schemas";
 import { fmtMs } from "@/lib/ui-state";
@@ -87,7 +88,7 @@ export function StartClient() {
     <main className="mx-auto flex min-h-dvh max-w-3xl flex-col px-4 sm:px-6">
       <header className="flex items-center justify-between py-5">
         <Link href="/" className="flex items-center gap-2 font-semibold">
-          <Wrench className="size-4" strokeWidth={1.75} />
+          <LogoMark />
           Second Hands
         </Link>
         <Link href="/try" className="text-sm text-muted-foreground hover:text-foreground">

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowRight, Eye, Play, Search, Volume2, Wrench } from "lucide-react";
+import { LogoMark } from "@/components/logo";
+import { ArrowRight, Eye, Play, Search, Volume2 } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -29,7 +30,7 @@ export default function Home() {
     <main className="mx-auto flex min-h-dvh max-w-5xl flex-col px-4 sm:px-6">
       <header className="flex items-center justify-between py-5">
         <div className="flex items-center gap-2 font-semibold">
-          <Wrench className="size-4" strokeWidth={1.75} />
+          <LogoMark />
           Second Hands
         </div>
         <Link href="/start" className="text-sm text-muted-foreground hover:text-foreground">

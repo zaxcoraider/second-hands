@@ -9,6 +9,8 @@ const lanHosts = Object.values(networkInterfaces())
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: [...lanHosts, "*.trycloudflare.com"],
+  // Keep local screen recordings clean.
+  devIndicators: false,
 };
 
 export default nextConfig;

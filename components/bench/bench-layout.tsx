@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Wrench } from "lucide-react";
+import { LogoMark } from "@/components/logo";
 import { Checklist } from "@/components/bench/checklist";
 import { EventsFeed } from "@/components/bench/events-feed";
 import { EvidencePanel } from "@/components/bench/evidence-panel";
@@ -45,7 +45,7 @@ export function BenchLayout({
       <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur">
         <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
           <Link href="/" className="flex items-center gap-2 text-sm font-semibold">
-            <Wrench className="size-4" strokeWidth={1.75} />
+            <LogoMark />
             <span className="hidden sm:inline">Second Hands</span>
           </Link>
           <h1 className="min-w-0 flex-1 truncate font-medium">{session.guide.title}</h1>
