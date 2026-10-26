@@ -9,6 +9,7 @@ export const CAPTURE = {
   pixelDelta: 24, // a 32×32 pixel "changed" if its grayscale moved by more than this (0-255); above sensor noise
   changedShare: 0.03, // send when at least this share of pixels changed (a hand moving over a small area)
   heartbeatMs: 6_000, // send a frame at least this often, even if nothing changed
+  minIntervalMs: 1_600, // never faster than this (~37/min): stays under the 40/min server limit and caps cost
 };
 
 function ready(v: FrameSource) {
@@ -57,6 +58,7 @@ export class ChangeDetector {
     const cur = this.sample(video);
     if (!cur) return false;
     if (!this.last) return true;
+    if (now - this.lastSentAt < CAPTURE.minIntervalMs) return false;
     let changed = 0;
     for (let i = 0; i < cur.length; i++) if (Math.abs(cur[i] - this.last[i]) > CAPTURE.pixelDelta) changed++;
     this.lastDiff = changed / cur.length;

@@ -28,6 +28,7 @@ export function TryClient() {
   const [notice, setNotice] = useState<string | null>(null);
   const [finished, setFinished] = useState<string | null>(null); // report id once done
   const videoRef = useRef<HTMLVideoElement>(null);
+  const hasClip = useRef(false);
   const voice = useRef<Voice | null>(null);
 
   // Sample clip if it's been recorded, otherwise the drawn placeholder bench.
@@ -36,8 +37,8 @@ export function TryClient() {
     (async () => {
       const video = videoRef.current;
       if (!video) return;
-      const hasClip = await fetch(SAMPLE_VIDEO, { method: "HEAD" }).then((r) => r.ok).catch(() => false);
-      if (hasClip) {
+      hasClip.current = await fetch(SAMPLE_VIDEO, { method: "HEAD" }).then((r) => r.ok).catch(() => false);
+      if (hasClip.current) {
         video.src = SAMPLE_VIDEO;
       } else {
         const p = startPlaceholderStream();
@@ -144,6 +145,12 @@ export function TryClient() {
     setMode("starting");
     setFinished(null);
     setNotice(null);
+    // Real models see the drawn placeholder for what it is (no hands, no real phone), so a live run
+    // can't progress. Until the real sample clip is recorded, play the recorded run.
+    if (!hasClip.current) {
+      await startReplay("This is a recorded run of the same pipeline.");
+      return;
+    }
     try {
       const res = await fetch("/api/try", { method: "POST" });
       const body = await res.json();
