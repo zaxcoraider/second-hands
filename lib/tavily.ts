@@ -3,7 +3,7 @@ import { env, isMockTavily } from "@/lib/env";
 import { mockSearch } from "@/lib/mock/scripts";
 import type { TraceEntry } from "@/lib/schemas";
 
-/** Tavily search + extract. VERIFY in Phase 0: params and Bearer auth against current docs. */
+/** Tavily search + extract (Bearer auth; params checked in Phase 0). */
 
 const BASE = "https://api.tavily.com";
 
@@ -37,6 +37,8 @@ export async function searchGuides(query: string): Promise<Traced<SearchResult[]
       query,
       search_depth: "advanced",
       max_results: 5,
+      // Video and social pages have no step text for extract to read.
+      exclude_domains: ["youtube.com", "tiktok.com", "instagram.com", "facebook.com", "pinterest.com", "reddit.com"],
     });
     return { data: data.results ?? [], trace: trace("search", started, true, false) };
   } catch (err) {
