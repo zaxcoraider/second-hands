@@ -63,7 +63,7 @@ export function BenchLayout({
           </Link>
           <span aria-hidden className="hidden h-5 w-px bg-line sm:block" />
           <h1 className="min-w-0 flex-1 truncate font-display text-base font-semibold tracking-tight sm:text-lg">{session.guide.title}</h1>
-          <div className="flex w-full items-center justify-between gap-4 sm:w-auto sm:justify-end sm:gap-6">
+          <div className="flex w-full flex-wrap items-center justify-between gap-x-4 gap-y-2 sm:w-auto sm:flex-nowrap sm:justify-end sm:gap-6">
           <dl className="flex items-center gap-3 font-mono text-[11px] tracking-[0.1em] uppercase tabular sm:gap-5 sm:text-xs">
             <div className="flex items-center gap-2">
               <span className={cn("size-2 rounded-full", connected ? "hud-blink bg-ok shadow-[0_0_8px_var(--ok)]" : "bg-idle")} />
