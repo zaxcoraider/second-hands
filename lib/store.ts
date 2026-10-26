@@ -85,7 +85,7 @@ const db = () => (kv ??= hasRedis() ? new RedisKV() : new MemoryKV());
 
 // Reports must outlive judging (ends Dec 15), so sessions live ~70 days.
 const SESSION_TTL = 60 * 60 * 24 * 70;
-const THUMB_TTL = 60 * 60 * 48;
+const LIVE_FRAME_TTL = 60 * 30;
 
 const k = {
   session: (id: string) => `s:${id}`,
@@ -123,7 +123,8 @@ export const store = {
   getOverrides: (id: string) => db().lrange<Override>(k.overrides(id), 0, -1),
 
   /** The latest frame as a data URL, for the dashboard's live view. */
-  setLatestFrame: (id: string, dataUrl: string) => db().set(k.frame(id), dataUrl, THUMB_TTL),
+  // Only needed while someone is watching, so it expires quickly (privacy).
+  setLatestFrame: (id: string, dataUrl: string) => db().set(k.frame(id), dataUrl, LIVE_FRAME_TTL),
   getLatestFrame: (id: string) => db().get<string>(k.frame(id)),
 
   /** Evidence thumbnails attached to warnings. */

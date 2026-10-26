@@ -123,7 +123,7 @@ Every model call runs through **Nebius Token Factory** at runtime ([`lib/ai/clie
 | 👁 **Eyes** | `Nemotron-3.5-Super-VL` | Each frame + the current manual step → structured observation: step state, possible mistake, confidence, evidence, and a focus box | The NVIDIA vision model on Token Factory, strong enough to read small parts on a board |
 | ⚡ **Gatekeeper** | `Nemotron-3-Nano-30B-A3B` | *Warn / ask / stay silent*, and writes the ≤15-word spoken line | Runs on every confirmed candidate, so it has to be fast and cheap. Reasoning off. |
 | 🧭 **Planner** | `nemotron-3-super-120b-a12b` | Tavily-fetched guide → camera-checkable steps, camera setup tip, safety refusals; end-of-session summary | Long-context reading and careful structure, once or twice per session |
-| ⚖️ **Judge** | `Nemotron-3-Ultra-550b-a55b` | Verifies high-severity warnings across recent frames before any "Stop" | A false stop kills trust, a missed one breaks a device or a finger. The biggest model, reasoning on, for this call only. |
+| ⚖️ **Judge** | `Nemotron-3-Ultra-550b-a55b` | Reasons over Super VL's observations from recent frames (text, not pixels) and confirms a high-severity warning before any "Stop" | A false stop kills trust, a missed one breaks a device or a finger. The biggest model, reasoning on, for this call only. |
 
 **What keeps it accurate and cheap:**
 - **Confirmation is code, not a model.** A mistake must show in 2 of the last 3 frames, isn't repeated within 25 s, and is silenced by an override ([`confirm.ts`](lib/pipeline/confirm.ts), unit-tested).

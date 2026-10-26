@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import { z } from "zod";
 import { fail, parseBody } from "@/lib/api";
 import type { SessionEvent } from "@/lib/schemas";
+import { rateLimit } from "@/lib/ratelimit";
 import { store } from "@/lib/store";
 
 const Body = z.object({ action: z.enum(["next", "back"]) });
@@ -12,6 +13,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const { id } = await params;
   const body = await parseBody(req, Body);
   if (!body) return fail(400, "Invalid step action.");
+  if (!(await rateLimit("control", req))) return fail(429, "Too many taps. Slow down a little.");
   const session = await store.getSession(id);
   if (!session) return fail(404, "Session not found.");
   if (session.status === "done") return fail(409, "This session is finished.");
