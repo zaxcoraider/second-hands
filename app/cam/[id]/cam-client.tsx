@@ -196,6 +196,7 @@ export function CamClient({ id }: { id: string }) {
     videoRef,
     sessionId: id,
     running: phase === "live",
+    preview: true,
     onResult,
     onError: setNotice,
     onStop: (msg) => {

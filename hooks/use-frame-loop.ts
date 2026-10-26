@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChangeDetector, grabFrame } from "@/lib/capture/frames";
+import { CAPTURE, ChangeDetector, grabFrame } from "@/lib/capture/frames";
 import type { FrameResultBody } from "@/lib/client-types";
 
 export type FrameLoopStats = { sent: number; inflight: boolean; lastMs: number | null; diff: number };
@@ -19,6 +19,8 @@ export function useFrameLoop(args: {
   videoRef: React.RefObject<HTMLVideoElement | null>;
   sessionId: string;
   running: boolean;
+  /** Also upload a small frame often for the dashboard's live view (phone camera only). */
+  preview?: boolean;
   onResult: (r: FrameResultBody) => void;
   onError?: (message: string) => void;
   onStop?: (message: string) => void;
@@ -79,12 +81,36 @@ export function useFrameLoop(args: {
       }
     };
 
+    // Live view: independent of the model loop, so the dashboard stays ~1 s behind instead of 2-7 s.
+    const previewCanvas = document.createElement("canvas");
+    let previewBusy = false;
+    const sendPreview = async () => {
+      const video = cb.current.videoRef.current;
+      if (stopped || previewBusy || !video || Date.now() < backoffUntil) return;
+      const image = grabFrame(video, previewCanvas, CAPTURE.previewEdge, CAPTURE.previewQuality);
+      if (!image) return;
+      previewBusy = true;
+      try {
+        await fetch("/api/preview", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sessionId: cb.current.sessionId, image }),
+        });
+      } catch {
+        // A dropped preview is fine; the next one replaces it.
+      } finally {
+        previewBusy = false;
+      }
+    };
+
     const timer = setInterval(tick, 350);
+    const previewTimer = args.preview ? setInterval(sendPreview, CAPTURE.previewMs) : undefined;
     return () => {
       stopped = true;
       clearInterval(timer);
+      clearInterval(previewTimer);
     };
-  }, [args.running, args.sessionId]);
+  }, [args.running, args.sessionId, args.preview]);
 
   return { ...stats, requestFrame: () => (force.current = true) };
 }

@@ -9,6 +9,10 @@ export const CAPTURE = {
   pixelDelta: 24, // a 32×32 pixel "changed" if its grayscale moved by more than this (0-255); above sensor noise
   changedShare: 0.03, // send when at least this share of pixels changed (a hand moving over a small area)
   heartbeatMs: 6_000, // send a frame at least this often, even if nothing changed
+  // Live-view preview for the dashboard: small and frequent, never sent to a model.
+  previewEdge: 480,
+  previewQuality: 0.5,
+  previewMs: 700,
   minIntervalMs: 1_600, // never faster than this (~37/min): stays under the 40/min server limit and caps cost
 };
 
@@ -17,15 +21,20 @@ function ready(v: FrameSource) {
 }
 
 /** Downscaled JPEG data URL of the current video frame, or null if the video isn't ready. */
-export function grabFrame(video: FrameSource, canvas: HTMLCanvasElement): string | null {
+export function grabFrame(
+  video: FrameSource,
+  canvas: HTMLCanvasElement,
+  longEdge = CAPTURE.longEdge,
+  quality = CAPTURE.quality,
+): string | null {
   if (!ready(video)) return null;
-  const scale = Math.min(1, CAPTURE.longEdge / Math.max(video.videoWidth, video.videoHeight));
+  const scale = Math.min(1, longEdge / Math.max(video.videoWidth, video.videoHeight));
   canvas.width = Math.round(video.videoWidth * scale);
   canvas.height = Math.round(video.videoHeight * scale);
   const ctx = canvas.getContext("2d");
   if (!ctx) return null;
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  return canvas.toDataURL("image/jpeg", CAPTURE.quality);
+  return canvas.toDataURL("image/jpeg", quality);
 }
 
 /** Compares a 32×32 grayscale thumbnail against the last frame that was sent. */

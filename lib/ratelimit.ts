@@ -6,7 +6,7 @@ import { store } from "@/lib/store";
 
 /** Per-IP limits from architecture.md, plus the global daily budget. */
 
-type Kind = "session" | "try" | "frame" | "guide";
+type Kind = "session" | "try" | "frame" | "guide" | "preview";
 
 const RULES: Record<Kind, { tokens: number; window: `${number} ${"s" | "m" | "h" | "d"}`; ms: number }> = {
   session: { tokens: 10, window: "1 d", ms: 86_400_000 },
@@ -14,6 +14,8 @@ const RULES: Record<Kind, { tokens: number; window: `${number} ${"s" | "m" | "h"
   try: { tokens: 10, window: "1 d", ms: 86_400_000 },
   guide: { tokens: 10, window: "1 d", ms: 86_400_000 },
   frame: { tokens: 40, window: "1 m", ms: 60_000 },
+  // Live-view previews cost no model calls, only a Redis write.
+  preview: { tokens: 120, window: "1 m", ms: 60_000 },
 };
 
 let limiters: Record<Kind, Ratelimit> | undefined;
