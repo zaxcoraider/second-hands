@@ -32,12 +32,18 @@ export async function searchGuides(query: string): Promise<Traced<SearchResult[]
     await new Promise((r) => setTimeout(r, 600));
     return { data: mockSearch(query), trace: trace("search", started, true, true) };
   }
-  const data = await post<{ results: SearchResult[] }>("/search", {
-    query,
-    search_depth: "advanced",
-    max_results: 5,
-  });
-  return { data: data.results ?? [], trace: trace("search", started, true, false) };
+  try {
+    const data = await post<{ results: SearchResult[] }>("/search", {
+      query,
+      search_depth: "advanced",
+      max_results: 5,
+    });
+    return { data: data.results ?? [], trace: trace("search", started, true, false) };
+  } catch (err) {
+    // Non-fatal: the planner falls back to its own knowledge (or a curated guide).
+    console.error("[tavily search]", err);
+    return { data: [], trace: trace("search", started, false, false) };
+  }
 }
 
 export async function extractPages(urls: string[]): Promise<Traced<{ url: string; content: string }[]>> {
@@ -46,9 +52,14 @@ export async function extractPages(urls: string[]): Promise<Traced<{ url: string
     await new Promise((r) => setTimeout(r, 500));
     return { data: [], trace: trace("extract", started, true, true) };
   }
-  const data = await post<{ results: { url: string; raw_content: string }[] }>("/extract", { urls });
-  return {
-    data: (data.results ?? []).map((r) => ({ url: r.url, content: r.raw_content ?? "" })),
-    trace: trace("extract", started, true, false),
-  };
+  try {
+    const data = await post<{ results: { url: string; raw_content: string }[] }>("/extract", { urls });
+    return {
+      data: (data.results ?? []).map((r) => ({ url: r.url, content: r.raw_content ?? "" })),
+      trace: trace("extract", started, true, false),
+    };
+  } catch (err) {
+    console.error("[tavily extract]", err);
+    return { data: [], trace: trace("extract", started, false, false) };
+  }
 }

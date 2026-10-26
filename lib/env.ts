@@ -8,6 +8,8 @@ export const env = {
   // Vercel's Upstash integration sets the KV_* names; a manual Upstash setup uses UPSTASH_*.
   redisUrl: process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || "",
   redisToken: process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || "",
+  // Secret for the owner bypass (see lib/ratelimit.ts). Empty disables it.
+  ownerKey: process.env.OWNER_KEY ?? "",
   dailyBudgetUsd: Number(process.env.DAILY_BUDGET_USD ?? "1.5"),
 };
 

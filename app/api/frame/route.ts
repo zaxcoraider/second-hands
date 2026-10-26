@@ -3,7 +3,7 @@ import { z } from "zod";
 import { fail, parseBody } from "@/lib/api";
 import { isMockAI } from "@/lib/env";
 import { processFrame } from "@/lib/pipeline/frame";
-import { clientIp, overBudget, rateLimit } from "@/lib/ratelimit";
+import { isOwner, overBudget, rateLimit } from "@/lib/ratelimit";
 import { store } from "@/lib/store";
 
 export const maxDuration = 60;
@@ -19,13 +19,13 @@ const Body = z.object({
 export async function POST(req: Request) {
   const body = await parseBody(req, Body);
   if (!body) return fail(400, "Invalid frame.");
-  if (!(await rateLimit("frame", clientIp(req)))) return fail(429, "Too many frames. Slow down a little.");
+  if (!(await rateLimit("frame", req))) return fail(429, "Too many frames. Slow down a little.");
 
   const session = await store.getSession(body.sessionId);
   if (!session) return fail(404, "Session not found.");
   if (session.status === "done") return fail(409, "This session is finished.");
   if (!isMockAI() && (await overBudget())) return fail(503, "Today's demo budget is used up.");
-  if (process.env.NODE_ENV !== "development" && session.startedAt && Date.now() - session.startedAt > LIVE_CAP_MS) {
+  if (process.env.NODE_ENV !== "development" && !isOwner(req) && session.startedAt && Date.now() - session.startedAt > LIVE_CAP_MS) {
     return fail(403, "Demo sessions are capped at 5 minutes. Finish to see your report.");
   }
 

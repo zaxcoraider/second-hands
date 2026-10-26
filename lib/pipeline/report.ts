@@ -22,6 +22,7 @@ export async function finishSession(session: Session): Promise<Session> {
       stage: "report",
       sessionId: session.id,
       maxTokens: 400,
+      reasoning: false,
       timeoutMs: 30_000,
       messages: [
         { role: "system", content: REPORT_SYSTEM },

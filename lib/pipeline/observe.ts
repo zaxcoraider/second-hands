@@ -23,6 +23,7 @@ export async function observe(args: {
     stage: "observe",
     sessionId: args.sessionId,
     maxTokens: 300,
+    reasoning: false,
     timeoutMs: 15_000,
     messages: [
       { role: "system", content: OBSERVE_SYSTEM },

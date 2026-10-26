@@ -34,9 +34,10 @@ function upstash() {
 const g = globalThis as unknown as { __shRl?: Map<string, number[]> };
 const mem: Map<string, number[]> = (g.__shRl ??= new Map());
 
-export async function rateLimit(kind: Kind, ip: string): Promise<boolean> {
+export async function rateLimit(kind: Kind, req: Request): Promise<boolean> {
   // Limits protect the Token Factory budget: skip them in dev and in mock mode, where calls cost nothing.
-  if (process.env.NODE_ENV === "development" || isMockAI()) return true;
+  if (process.env.NODE_ENV === "development" || isMockAI() || isOwner(req)) return true;
+  const ip = clientIp(req);
   if (hasRedis()) return (await upstash()[kind].limit(ip)).success;
   const key = `${kind}:${ip}`;
   const now = Date.now();
@@ -53,4 +54,13 @@ export async function overBudget(): Promise<boolean> {
 
 export function clientIp(req: Request): string {
   return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "local";
+}
+
+export const OWNER_COOKIE = "sh_owner";
+
+/** The project owner (cookie set by visiting any page with ?owner=OWNER_KEY) skips per-IP limits and the live cap. */
+export function isOwner(req: Request): boolean {
+  if (!env.ownerKey) return false;
+  const cookie = req.headers.get("cookie") ?? "";
+  return cookie.split(/;\s*/).some((c) => c === `${OWNER_COOKIE}=${env.ownerKey}`);
 }
