@@ -25,6 +25,7 @@
 <p align="center">
   <a href="#-see-it-work">See it work</a> ·
   <a href="#-how-it-works">How it works</a> ·
+  <a href="#-works-on-any-device">Devices</a> ·
   <a href="#-how-nemotron-and-token-factory-are-used">Nemotron + Token Factory</a> ·
   <a href="#-how-tavily-is-used">Tavily</a> ·
   <a href="#-roadmap">Roadmap</a> ·
@@ -44,6 +45,16 @@ Mount any phone above your work: a phone repair, a cutting board, a flat-pack bo
 | 🔍 **Finds the guide** | 👁 **Watches your hands** | 🗣 **Speaks up when it matters** |
 |:---|:---|:---|
 | Tavily pulls real guides at runtime. Nemotron Super turns them into steps a camera can verify. | Nemotron Super VL checks each frame against the step you're on and boxes what it's looking at. | Nano decides whether to interrupt. Ultra double-checks the evidence before it ever says "Stop." |
+
+<table>
+  <tr>
+    <td align="center" width="25%"><h3>4</h3><sub>NVIDIA Nemotron models,<br>one job each</sub></td>
+    <td align="center" width="25%"><h3>~1 s</h3><sub>for Super VL<br>to read a frame</sub></td>
+    <td align="center" width="25%"><h3>2.8 s</h3><sub>for the frame that turned a staged<br>mistake into a verified STOP</sub></td>
+    <td align="center" width="25%"><h3>≤ $0.20</h3><sub>in model calls for a<br>10-minute session</sub></td>
+  </tr>
+</table>
+<p align="center"><sub>Measured on Nebius Token Factory, Oct 26 2026 (Phase 0 smoke test). Details <a href="#-how-nemotron-and-token-factory-are-used">below</a>.</sub></p>
 
 ## 📸 See it work
 
@@ -85,13 +96,13 @@ Tasks where a missed warning could seriously hurt someone (mains electrical, gas
 **📱 The phone app** (installable, no app store)
 - Full-screen HUD over the live camera: segmented step bar, scan line, and a **focus box** drawn from the vision model's output
 - **Pair in a second:** scan the laptop's QR (native `BarcodeDetector`, jsQR fallback) or type the 8-character code
-- **Camera check** before starting (light, focus) and a **flashlight** toggle
+- **Camera check** before starting (light, focus) and a **flashlight** toggle (Android)
 - **Hands-free voice commands:** *"skip"*, *"back"*, *"repeat"*, *"check"*, *"I'm right"*, *"pause"*. It never reacts to its own voice.
 - **Manual controls:** Back · Check now · Skip · Pause, so the person stays in charge
 - Spoken warnings with a chime before every *Stop*; the screen stays awake
 
 **💻 The bench dashboard**
-- Procedure checklist, live view, **evidence panel** (the frame next to the manual step), console-style event log
+- Procedure checklist, **live view about 1 s behind the camera** (a small preview stream that never touches a model), **evidence panel** (the frame next to the manual step), console-style event log
 - **Agent trace:** every Token Factory call with stage, model, latency, tokens and cost
 - **Session report:** steps done, mistakes caught, false alarms, duration, cost, and a timeline with the frame behind every warning
 
@@ -110,9 +121,37 @@ Tasks where a missed warning could seriously hurt someone (mains electrical, gas
 | 5 | **Ask** | When unsure, it asks instead: *"Is that the long screw? Hold it closer."* **I'm right** silences it for that step. |
 | 6 | **Report** · `/report` | Steps done, mistakes caught, false alarms, duration, cost, and the evidence timeline. |
 
+**The catch loop**, from frame to spoken warning:
+
+```mermaid
+flowchart LR
+    F["📷 Frame<br/>(on change)"] --> VL["👁 Super VL<br/>observe"]
+    VL --> C{"2 of last 3<br/>frames agree?"}
+    C -- no --> F
+    C -- yes --> N["⚡ Nano<br/>warn · ask · silent"]
+    N -- silent --> F
+    N -- "high severity" --> U["⚖️ Ultra<br/>verify"]
+    N -- "low / medium" --> A["🔔 Ask or warn"]
+    U -- confirmed --> S["🛑 STOP"]
+    U -- "not sure" --> A
+```
+
 <p align="center">
   <img src="docs/architecture.svg" alt="Architecture: clients, the guide, frame and report pipelines on Vercel, and Token Factory, Tavily and Upstash Redis" width="100%">
 </p>
+
+## 📱 Works on any device
+
+Everything runs in the browser over the internet, so the camera and the dashboard don't need to share a Wi-Fi network, and nothing is installed from an app store.
+
+| Camera | Dashboard | |
+|---|---|---|
+| Android phone (Chrome) | Laptop / PC, or another phone | ✅ Tested on a Poco F1 and a Moto G85 |
+| iPhone (Safari) | Laptop / PC, or another phone | ✅ Tested in WebKit with iPhone 15 emulation: QR pairing, frames, live view |
+| Laptop webcam | The same laptop | ✅ Point the webcam at your hands |
+| No camera | Any browser | ✅ [`/try`](https://second-hands-seven.vercel.app/try) sample run |
+
+On iPhone, add it with Share → *Add to Home Screen*. Safari doesn't let web apps control the flashlight, and voice commands depend on the iOS version; the on-screen buttons always work.
 
 ## 🧠 How Nemotron and Token Factory are used
 
@@ -156,7 +195,7 @@ Tavily is the product's source of truth, not decoration. At runtime, `/api/guide
 | | |
 |---|---|
 | ▶ **No setup** | Open **[/try](https://second-hands-seven.vercel.app/try)** and press *Run the sample*: the same pipeline on a sample clip, ending in a report. |
-| 📱 **With a phone** | Open **[/start](https://second-hands-seven.vercel.app/start)** on a laptop, pick a task, start the session, and scan the QR with the phone. On Android, install the app from **[/cam](https://second-hands-seven.vercel.app/cam)**. |
+| 📱 **With a phone** | Open **[/start](https://second-hands-seven.vercel.app/start)** on a laptop, pick a task, start the session, and scan the QR with the phone. Install the phone app from **[/cam](https://second-hands-seven.vercel.app/cam)** (Android: *Install*; iPhone: *Add to Home Screen*). |
 
 No login anywhere.
 
@@ -179,6 +218,9 @@ No login anywhere.
       • Manual Back / Check / Skip<br>
       • 6 task categories + safety refusals<br>
       • Bench dashboard, agent trace, session report<br>
+      • Live view ~1 s behind the camera<br>
+      • Android, iPhone and PC, any pairing<br>
+      • Security hardening: input limits, rate limits, headers<br>
       • Zero-setup <code>/try</code> with replay fallback
     </td>
     <td>
@@ -256,12 +298,24 @@ public/         app icons, service worker, offline page, sample replay
 
 `pnpm test` runs the unit tests · `pnpm build` makes a production build.
 
-## 🛡 Safety and limitations
+## 🛡 Safety, security and privacy
 
-- **Guidance only.** You are responsible for your work. No mains electrical or gas work; those tasks are refused.
+**Safety**
+- **Guidance only.** You are responsible for your work. Tasks where a missed warning could seriously hurt someone (mains electrical, gas, vehicle brakes, firearms) are refused, including in hand-edited guides.
 - In the demo, the battery is only disconnected, never pried or punctured.
 - A camera can't verify fine soldering or micro-components, so steps it can't check are skipped unless they're safety-critical.
-- The public demo is rate-limited (per IP, a daily budget, a 5-minute cap per live session) so it stays up for judging.
+
+**Security**
+- API keys live only on the server; the browser never sees them.
+- Every request body is validated with zod and size-limited, so an oversized guide can't drain the model budget.
+- Web pages from Tavily are passed to the planner as data, with instructions inside them ignored.
+- Per-IP rate limits, a daily spend cap and a 5-minute cap per live session keep the public demo up through judging.
+- No framing, no MIME sniffing, and camera and microphone access only for this site.
+
+**Privacy**
+- No accounts and no login. A session is reachable only through its random 8-character code.
+- Audio never leaves the phone for Second Hands: voice commands are matched on the device (the browser's speech recognition may use the platform's own service).
+- The live view frame expires after 30 minutes. Evidence frames are kept with the report so you can see why a warning fired.
 
 ---
 
