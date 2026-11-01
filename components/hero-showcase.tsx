@@ -91,7 +91,7 @@ const SCENES: Scene[] = [
     plate: { kicker: "Step done", text: "Tyre seated. Next: inflate to 60 psi." },
     callouts: [
       { text: "Auto step tracking", side: "left", top: "28%" },
-      { text: "Nano 30B · quiet when fine", side: "right", top: "60%" },
+      { text: "Lightning · quiet when fine", side: "right", top: "60%" },
     ],
     Art: BikeArt,
   },
@@ -102,10 +102,10 @@ const SCENES: Scene[] = [
     step: "00",
     done: 0,
     title: "Building your guide",
-    plate: { kicker: "Tavily + Super 120B", text: "Found the guide. 7 camera-checkable steps." },
+    plate: { kicker: "Tavily + Super VL", text: "Found the guide. 7 camera-checkable steps." },
     callouts: [
       { text: "Tavily · search + extract", side: "right", top: "26%" },
-      { text: "Super 120B · steps", side: "left", top: "56%" },
+      { text: "Super VL · steps", side: "left", top: "56%" },
     ],
     Art: GuideArt,
   },

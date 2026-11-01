@@ -99,7 +99,7 @@ export default async function ReportPage({ params }: Props) {
       </dl>
 
       {session.summary && (
-        <HudPanel index="01" label="Summary · Nemotron Super 120B">
+        <HudPanel index="01" label="Summary · Nemotron Super VL">
           <p className="p-5 text-[15px] leading-relaxed text-foreground/90">{session.summary}</p>
         </HudPanel>
       )}

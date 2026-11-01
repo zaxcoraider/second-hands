@@ -11,7 +11,7 @@ const HOW = [
     icon: Search,
     title: "Finds the real guide",
     body: "Name the job: a repair, a recipe, a build. Tavily searches the web at runtime and Nemotron turns the guide into steps a camera can verify.",
-    tag: "Tavily · Super 120B",
+    tag: "Tavily · Super VL",
   },
   {
     icon: Eye,
@@ -23,7 +23,7 @@ const HOW = [
     icon: Volume2,
     title: "Speaks up only when it matters",
     body: "A mistake must show in 2 of 3 frames. A fast model decides whether to interrupt; the largest model verifies before any “Stop”.",
-    tag: "Nano 30B · Ultra 550B",
+    tag: "Lightning · Ultra 550B",
   },
 ];
 
@@ -38,8 +38,8 @@ const WORKS_FOR = [
 
 const STACK = [
   { role: "Eyes", model: "Nemotron 3.5 Super VL", job: "Reads every frame against the manual step", tone: "text-hud" },
-  { role: "Gatekeeper", model: "Nemotron 3 Nano 30B", job: "Decides warn, ask or stay silent; writes the line", tone: "text-ok" },
-  { role: "Planner", model: "Nemotron 3 Super 120B", job: "Turns web guides into camera-checkable steps", tone: "text-ask" },
+  { role: "Gatekeeper", model: "Nemotron 3.5 Lightning", job: "Decides warn, ask or stay silent; writes the line", tone: "text-ok" },
+  { role: "Planner", model: "Nemotron 3.5 Super VL", job: "Turns web guides into camera-checkable steps", tone: "text-ask" },
   { role: "Judge", model: "Nemotron 3 Ultra 550B", job: "Verifies the evidence before every Stop", tone: "text-stop" },
 ];
 
