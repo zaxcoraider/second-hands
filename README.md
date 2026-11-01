@@ -44,7 +44,7 @@ Mount any phone above your work: a phone repair, a cutting board, a flat-pack bo
 
 | 🔍 **Finds the guide** | 👁 **Watches your hands** | 🗣 **Speaks up when it matters** |
 |:---|:---|:---|
-| Tavily pulls real guides at runtime. Nemotron Super turns them into steps a camera can verify. | Nemotron Super VL checks each frame against the step you're on and boxes what it's looking at. | Nano decides whether to interrupt. Ultra double-checks the evidence before it ever says "Stop." |
+| Tavily pulls real guides at runtime. Nemotron Super VL turns them into steps a camera can verify. | Nemotron Super VL checks each frame against the step you're on and boxes what it's looking at. | Lightning decides whether to interrupt. Ultra double-checks the evidence before it ever says "Stop." |
 
 <table>
   <tr>
@@ -117,7 +117,7 @@ Tasks where a missed warning could seriously hurt someone (mains electrical, gas
 | 1 | **Start** · `/start` | Pick a category and type the job (*"Redmi Note 8 battery replacement"*, *"Dice an onion safely"*). Tavily finds real guides; Nemotron builds the checklist with what "done" looks like *from above*, the costly mistakes to watch for, and where to put the camera. |
 | 2 | **Pair** · `/cam` | Scan the QR with any phone (or install the app). Camera check, then it starts watching. |
 | 3 | **Watch** | The phone sends a frame whenever the scene changes. The dashboard shows the live view, checklist, events and every model call. |
-| 4 | **Catch** | The same mistake in 2 of the last 3 frames → Nano decides if it's worth interrupting → on high-severity steps Ultra verifies → the phone chimes: **"Stop."** |
+| 4 | **Catch** | The same mistake in 2 of the last 3 frames → Lightning decides if it's worth interrupting → on high-severity steps Ultra verifies → the phone chimes: **"Stop."** |
 | 5 | **Ask** | When unsure, it asks instead: *"Is that the long screw? Hold it closer."* **I'm right** silences it for that step. |
 | 6 | **Report** · `/report` | Steps done, mistakes caught, false alarms, duration, cost, and the evidence timeline. |
 
@@ -128,7 +128,7 @@ flowchart LR
     F["📷 Frame<br/>(on change)"] --> VL["👁 Super VL<br/>observe"]
     VL --> C{"2 of last 3<br/>frames agree?"}
     C -- no --> F
-    C -- yes --> N["⚡ Nano<br/>warn · ask · silent"]
+    C -- yes --> N["⚡ Lightning<br/>warn · ask · silent"]
     N -- silent --> F
     N -- "high severity" --> U["⚖️ Ultra<br/>verify"]
     N -- "low / medium" --> A["🔔 Ask or warn"]
@@ -155,13 +155,13 @@ On iPhone, add it with Share → *Add to Home Screen*. Safari doesn't let web ap
 
 ## 🧠 How Nemotron and Token Factory are used
 
-Every model call runs through **Nebius Token Factory** at runtime ([`lib/ai/client.ts`](lib/ai/client.ts)). Four **NVIDIA Nemotron** models each get one job, sized to it:
+Every model call runs through **Nebius Token Factory** at runtime ([`lib/ai/client.ts`](lib/ai/client.ts)). Three **NVIDIA Nemotron** models cover four jobs, each sized to its job:
 
 | Role | Model | Job | Why this size |
 |---|---|---|---|
 | 👁 **Eyes** | `Nemotron-3.5-Super-VL` | Each frame + the current manual step → structured observation: step state, possible mistake, confidence, evidence, and a focus box | The NVIDIA vision model on Token Factory, strong enough to read small parts on a board |
-| ⚡ **Gatekeeper** | `Nemotron-3-Nano-30B-A3B` | *Warn / ask / stay silent*, and writes the ≤15-word spoken line | Runs on every confirmed candidate, so it has to be fast and cheap. Reasoning off. |
-| 🧭 **Planner** | `nemotron-3-super-120b-a12b` | Tavily-fetched guide → camera-checkable steps, camera setup tip, safety refusals; end-of-session summary | Long-context reading and careful structure, once or twice per session |
+| ⚡ **Gatekeeper** | `Nemotron-3_5-Lightning` | *Warn / ask / stay silent*, and writes the ≤15-word spoken line | Runs on every confirmed candidate, so it has to be fast and cheap. Reasoning off. |
+| 🧭 **Planner** | `Nemotron-3.5-Super-VL` (text only) | Tavily-fetched guide → camera-checkable steps, camera setup tip, safety refusals; end-of-session summary | Long-context reading and careful structure, once or twice per session. Reasoning off, otherwise it spends the whole token budget thinking. |
 | ⚖️ **Judge** | `Nemotron-3-Ultra-550b-a55b` | Reasons over Super VL's observations from recent frames (text, not pixels) and confirms a high-severity warning before any "Stop" | A false stop kills trust, a missed one breaks a device or a finger. The biggest model, reasoning on, for this call only. |
 
 **What keeps it accurate and cheap:**
@@ -173,14 +173,14 @@ Every model call runs through **Nebius Token Factory** at runtime ([`lib/ai/clie
 - **Thinking only where it pays.** Nemotron reasons by default; Eyes, Gatekeeper and Planner run with `enable_thinking: false` for speed. Only the Judge thinks.
 - **Full transparency.** Every call is traced (stage, model, latency, tokens, $) live on the dashboard and in the report.
 
-**Measured on Token Factory** (Phase 0 smoke test, Oct 26 2026; single runs, so treat as indicative):
+**Measured on Token Factory** (smoke tests Oct 26 2026, and Nov 1 2026 for Lightning and the Super VL planner after Nebius deprecated Nano 30B and Super 120B on serverless; single runs, so treat as indicative):
 
 | Call | Model | Latency | Cost |
 |---|---|---|---|
 | Observe one 768 px frame (~1.2K input tokens) | Super VL | 0.8–1.4 s | $0.0005 |
-| Gate a candidate warning | Nano 30B | ~0.4 s | <$0.0001 |
+| Gate a candidate warning | Lightning | ~0.5–0.65 s | <$0.0001 |
 | Verify a STOP (reasoning on) | Ultra 550B | ~1.1 s | ~$0.001 |
-| Build a guide (Tavily search + extract + planner) | Super 120B | 20–22 s end to end | ~$0.003 |
+| Build a guide (Tavily search + extract + planner) | Super VL | ~9 s planner, 12–19 s end to end | ~$0.003–0.004 |
 
 A staged "display flex unplugged while the battery is connected" was flagged on the first frame and became an Ultra-verified **STOP** on the second (2.8 s for that frame). At the frame-rate cap, a 10-minute session costs at most ~$0.20 in model calls.
 
@@ -211,7 +211,7 @@ No login anywhere.
     <td>
       • Live on real Nemotron models via Token Factory<br>
       • Guide builder with Tavily + Nemotron<br>
-      • Live frame loop: Super VL → 2-of-3 confirm → Nano → Ultra<br>
+      • Live frame loop: Super VL → 2-of-3 confirm → Lightning → Ultra<br>
       • Phone HUD with focus box and spoken warnings<br>
       • Installable phone app, QR pairing<br>
       • Voice commands, flashlight, camera check<br>

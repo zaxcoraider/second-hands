@@ -50,6 +50,8 @@ export async function buildGuide(task: string): Promise<GuideResult> {
       { role: "user", content: guideUser(task, sources) },
     ],
     maxTokens: 3000,
+    // Off: with thinking on, Super VL spends the whole budget reasoning and returns no content.
+    reasoning: false,
     traces,
     timeoutMs: 60_000,
     mock: () => JSON.stringify(mockGuide(task)),

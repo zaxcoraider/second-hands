@@ -4,8 +4,8 @@ export type ModelRole = "vision" | "fast" | "planner" | "judge";
 
 export const MODELS: Record<ModelRole, string> = {
   vision: process.env.MODEL_VISION ?? "nvidia/Nemotron-3.5-Super-VL",
-  fast: process.env.MODEL_FAST ?? "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
-  planner: process.env.MODEL_PLANNER ?? "nvidia/nemotron-3-super-120b-a12b",
+  fast: process.env.MODEL_FAST ?? "nvidia/Nemotron-3_5-Lightning",
+  planner: process.env.MODEL_PLANNER ?? "nvidia/Nemotron-3.5-Super-VL",
   judge: process.env.MODEL_JUDGE ?? "nvidia/Nemotron-3-Ultra-550b-a55b",
 };
 
