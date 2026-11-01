@@ -157,6 +157,9 @@ On iPhone, add it with Share → *Add to Home Screen*. Safari doesn't let web ap
 
 Every model call runs through **Nebius Token Factory** at runtime ([`lib/ai/client.ts`](lib/ai/client.ts)). Three **NVIDIA Nemotron** models cover four jobs, each sized to its job:
 
+> [!NOTE]
+> **Model update (Nov 1 2026): Nebius deprecated Nemotron 3 Nano 30B and Nemotron 3 Super 120B on serverless Token Factory. Second Hands now runs on Nemotron 3.5 Lightning (Gatekeeper) and Nemotron 3.5 Super VL (Planner), at the same prices. Both were re-tested on real guide builds, and guide building got faster (12–19 s, down from 20–22 s).**
+
 | Role | Model | Job | Why this size |
 |---|---|---|---|
 | 👁 **Eyes** | `Nemotron-3.5-Super-VL` | Each frame + the current manual step → structured observation: step state, possible mistake, confidence, evidence, and a focus box | The NVIDIA vision model on Token Factory, strong enough to read small parts on a board |
@@ -173,7 +176,7 @@ Every model call runs through **Nebius Token Factory** at runtime ([`lib/ai/clie
 - **Thinking only where it pays.** Nemotron reasons by default; Eyes, Gatekeeper and Planner run with `enable_thinking: false` for speed. Only the Judge thinks.
 - **Full transparency.** Every call is traced (stage, model, latency, tokens, $) live on the dashboard and in the report.
 
-**Measured on Token Factory** (smoke tests Oct 26 2026, and Nov 1 2026 for Lightning and the Super VL planner after Nebius deprecated Nano 30B and Super 120B on serverless; single runs, so treat as indicative):
+**Measured on Token Factory** (smoke tests Oct 26 2026, and Nov 1 2026 for Lightning and the Super VL planner after **Nebius deprecated Nano 30B and Super 120B on serverless**; single runs, so treat as indicative):
 
 | Call | Model | Latency | Cost |
 |---|---|---|---|
